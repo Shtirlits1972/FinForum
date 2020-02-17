@@ -1,0 +1,68 @@
+﻿
+    <div id='jqxWidget'>
+
+        <div id="AddComment">
+
+            <div>Текст комментария</div>
+            <div style="overflow: hidden;">
+                <table>
+
+                    <tr>
+                        <td colspan="2" align="left">
+                            <div style="padding:3px; margin: 5px;" id='TextComment'></div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="2" style="padding-top: 10px;" align="center">
+                            <fieldset class="border p-2">
+                                <legend class="w-auto">ссылка</legend>
+                                <div>
+                                    <span>Адрес ссылки</span>
+                                    <span><input placeholder="http://" type="text" id="linkAdressComment" name="linkAdressComment" /></span>
+                                </div>
+                                <div>
+                                    <span>Текст ссылки &nbsp;</span>
+                                    <span><input placeholder="ссылка" id="linkTextComment" name="linkTextComment" value="ссылка" type="text" /></span>
+                                </div>
+                                <div>
+                                    <button type="button" style="width: 100%;" onclick="AddCommentLink()" class="btn btn-outline-info btn-xs py-0">Добавить ссылку</button>
+                                </div>
+                            </fieldset>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="2" style="padding-top: 10px;" align="center">
+                            <fieldset class="border p-2">
+                                <legend class="w-auto">картинка</legend>
+                                <div>
+                                    <span>Адрес изображения</span>
+                                    <span><input placeholder="http://" type="text" id="imgAdressComment" name="imgAdressComment" /></span>
+                                </div>
+
+                                <div>
+                                    <button type="button" style="width: 100%;" onclick="AddCommentImg()" class="btn btn-outline-info btn-xs py-0">Добавить изображение</button>
+                                </div>
+                            </fieldset>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style="padding-top: 10px;" align="center" colspan="2">
+
+                            <input style="margin-right: 5px;" type="button" id="SaveComment" value="Сохранить" />
+                            <input id="CancelComment" type="button" value="Отмена" />
+
+                        </td>
+                    </tr>
+
+                </table>
+
+                <input type="hidden" id="TopicId" name="TopicId" value="0" />
+                <input type="hidden" id="MessagesId" name="MessagesId"  value="0" />
+
+            </div>
+        </div>
+
+    </div>

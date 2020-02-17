@@ -1,0 +1,65 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Главный форум</title>
+    <script type="text/javascript" src="~/js/Views/Topic/topic.js"></script>
+    <link rel="stylesheet" href="~/css/pagination.css">
+
+</head>
+<body>
+
+    @{
+
+        string UserId = "0";
+
+        if (User.Identity.IsAuthenticated)
+        {
+            UserId = User.Claims.ToList()[0].Value;
+        }
+    }
+
+    <table style="width: 950px;">
+        <tr>
+            <td>
+                <input type="text" style="height: 30px;" id="inputSearch" name="inputSearch" class="form-control"  aria-describedby="inputGroup-sizing-sm" placeholder="поиск"/>
+            </td>
+            <td>
+                <button type="button" class="btn btn-outline-primary btn-xs py-0"  onclick="LikeSearch()" id="btnSearch" name="btnSearch" >поиск</button>
+            </td>
+        </tr>
+
+    </table>
+
+    <input type="hidden" id="hiddenUserId" name="hiddenUserId" value=@UserId />
+
+    <table id="tblTopic" name="tblTopic" style="width: 800px; height: 80%;">
+        <thead>
+            <tr>
+                <th>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <button class="btn btn-outline-info btn-xs py-0" name="btnAddTopic" id="btnAddTopic" onclick="AddTheme()">создать новую тему</button>
+                    }
+                </th>
+            </tr>
+        </thead>
+        <tbody id="tbody">
+        </tbody>
+    </table>
+
+    <div class="pagination-container">
+        <nav>
+            <ul class="pagination" id="paginationUL" name="paginationUL">
+            </ul>
+        </nav>
+    </div>
+
+    
+
+
+    @Html.Partial("AddTopic")
+    @Html.Partial("AddComment")
+
+</body>
+</html>

@@ -1,0 +1,68 @@
+﻿
+    <div id='jqxWidget'>
+        <div id="popupWindow">
+
+            <div>Тема</div>
+            <div style="overflow: hidden;">
+                <table style="width: 320px;">
+                    <tr>
+                        <td align="right" style="padding:3px; margin: 5px;">Название</td>
+                        <td align="left"><input style="padding:3px; margin: 5px;" placeholder="Название" id="Title" /></td>
+                    </tr>
+
+                    <tr>
+
+                        <td align="center" colspan="2">
+                            <div style="padding:3px; margin: 5px;" id='Text'></div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="2" style="padding-top: 10px;" align="center">
+                            <fieldset class="border p-2">
+                                <legend class="w-auto">ссылка</legend>
+                                <div>
+                                    <span>Адрес ссылки</span>
+                                    <span><input placeholder="http://" type="text" id="linkAdressTopic" name="linkAdressTopic" /></span>
+                                </div>
+                                <div>
+                                    <span>Текст ссылки &nbsp;</span>
+                                    <span><input placeholder="ссылка" id="linkTextTopic" name="linkTextTopic" value="ссылка" type="text" /></span>
+                                </div>
+                                <div>
+                                    <button type="button" style="width: 100%;" onclick="AddTopicLink()" class="btn btn-outline-info btn-xs py-0">Добавить ссылку</button>
+                                </div>
+                            </fieldset>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="2" style="padding-top: 10px;" align="center">
+                            <fieldset class="border p-2">
+                                <legend class="w-auto">картинка</legend>
+                                <div>
+                                    <span>Адрес изображения</span>
+                                    <span><input placeholder="http://" type="text" id="imgAdressTopic" name="imgAdressTopic" /></span>
+                                </div>
+
+                                <div>
+                                    <button type="button" style="width: 100%;" onclick="AddTopicImg()" class="btn btn-outline-info btn-xs py-0">Добавить изображение</button>
+                                </div>
+                            </fieldset>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style="padding-top: 10px;" align="center" colspan="2">
+                            <input style="margin-right: 5px; width: 100px;" type="button" id="Save" value="Сохранить" />
+                            <input id="Cancel" style="width: 100px;" type="button" value="Отмена" />
+
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        
+
+    </div>
