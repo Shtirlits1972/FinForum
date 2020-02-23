@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using FinForum.Models;
 using Microsoft.AspNetCore.Authorization;
 using FinForum.Models.TopicF;
+using FinForum.Models.ReportsQ;
 
 namespace FinForum.Controllers
 {
@@ -15,6 +16,8 @@ namespace FinForum.Controllers
     {
         public IActionResult Index()
         {
+            List<string[]> list = Q6Crud.GetAll();
+
             return View();
         }
 

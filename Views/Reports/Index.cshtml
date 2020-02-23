@@ -1,0 +1,65 @@
+﻿@{ 
+
+    string strTd = "td";
+    int countTd = 0;
+}
+
+
+<html>
+<head>
+    <title>Отчёт Q6</title>
+    @*<script src="~/js/Views/ReportsQ/Chart1.js"></script>*@
+    <script src="~/js/Views/ReportsQ/Index.js"></script>
+</head>
+<body>
+
+    <div style="max-height: 600px; max-width: 1200px; overflow: auto;">
+
+        <table class="table-bordered table-hover">
+
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                countTd = 0;
+                <tr>
+                    @foreach (var str in Model[i])
+                    {
+                        @if (countTd != 2 && countTd != 3)
+                        {
+                                <td>
+
+                                    @if (countTd == 1)
+                                    {
+                                        <a href="#" onclick="hello(@i)" id="@strTd + @i.ToString();  }">
+                                            @str.ToString().Replace("[", "").Replace("]", "").Trim()
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        @str.ToString().Replace("[", "").Replace("]", "").Trim()
+                                    }
+
+                                </td>
+                        }
+                          countTd++;
+                    }
+                </tr>
+            }
+
+        </table>
+    </div>
+
+    <div id="chartContainer" style="height: 370px; max-width: 920px; margin: 0px auto;"></div>
+
+    <script src="https://canvasjs.com/assets/script/jquery.canvasjs.min.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
