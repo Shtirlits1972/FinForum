@@ -16,8 +16,6 @@ namespace FinForum.Controllers
     {
         public IActionResult Index()
         {
-            List<string[]> list = Q6Crud.GetAll();
-
             return View();
         }
 

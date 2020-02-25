@@ -13,14 +13,14 @@ namespace FinForum.Models.ReportsQ
     {
         private static readonly string strConn = Ut.GetConnetString();
 
-        public static List<string[]> GetAll()
+        public static List<string[]> GetAll(int id_kl = 1, int RegNumberOfKO = 1000, int id_priz = 1, int id_mes1 = 180, int id_mes2 = 187, int i = 1)
         {
             List<string[]> list = new List<string[]>();
 
             using (IDbConnection db = new SqlConnection(strConn))
             {
                 var procedure = "[FillTT_web]";
-                var values = new { id_kl = 1, RegNumberOfKO = 1000, id_priz = 1, id_mes1 = 180, id_mes2 = 187, i = 1 };
+                var values = new { id_kl = id_kl, RegNumberOfKO = RegNumberOfKO, id_priz = id_priz, id_mes1 = id_mes1, id_mes2 = id_mes2, i = i };
                 var results = db.Query(procedure, values, commandType: CommandType.StoredProcedure).ToList();
 
 
@@ -30,20 +30,16 @@ namespace FinForum.Models.ReportsQ
                     int count = 0;
                         foreach (string str in row.Keys)
                         {
-                            //if(str != "Bo" && str != "lt")
-                            //{
-                                if (str == null)
-                                {
-                                    valueTable[count] = '\t'.ToString();
-                                }
-                                else
-                                {
-                                    valueTable[count] = str;
-                                }
-                                count++;
-                       // }
-                       
-                    }
+                            if (string.IsNullOrEmpty(str.Trim()))
+                            {
+                                valueTable[count] = "";
+                            }
+                            else
+                            {
+                                valueTable[count] = str;
+                            }
+                            count++;
+                        }
 
                     list.Add(valueTable);
                     break;
@@ -58,7 +54,7 @@ namespace FinForum.Models.ReportsQ
                     {
                         if (valuesStr == null)
                         {
-                            valueTable[count] = '\t'.ToString();
+                            valueTable[count] = "0";
                         }
                         else
                         {

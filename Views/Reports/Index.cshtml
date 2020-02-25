@@ -1,56 +1,54 @@
-﻿@{ 
-
-    string strTd = "td";
-    int countTd = 0;
-}
-
-
-<html>
+﻿<html>
 <head>
     <title>Отчёт Q6</title>
-    @*<script src="~/js/Views/ReportsQ/Chart1.js"></script>*@
+
     <script src="~/js/Views/ReportsQ/Index.js"></script>
+
+    <script src="~/js/JQWidgets/jqxchart.js"></script>
+    <script src="~/js/JQWidgets/jqxchart.api.js"></script>
+    <script src="~/js/JQWidgets/jqxchart.core.js"></script>
+    <script src="~/js/JQWidgets/jqxchart.annotations.js"></script>
+    <script src="~/js/JQWidgets/jqxchart.rangeselector.js"></script>
+    <script src="~/js/JQWidgets/jqxchart.waterfall.js"></script>
+    <script src="~/js/JQWidgets/jqxdraw.js"></script>
+    <script src="~/js/JQWidgets/jqxdata.js"></script>
+
 </head>
 <body>
 
-    <div style="max-height: 600px; max-width: 1200px; overflow: auto;">
+    <table style="max-width: 1200px; width: 1200px;">
+        <tr>
+            <th></th>
+            <th>Банки</th>
+            <th>Классификатор</th>
+            <th>начало периода</th>
+            <th>окончание периода</th>
+        </tr>
 
-        <table class="table-bordered table-hover">
+        <tr>
+            <td>
+                <button type="button" id="btnRefresh" name="btnRefresh" onclick="GetDataReportQ6()">ОБНОВИТЬ</button>
+            </td>
+            <td>
+                <div id='BankSel'></div>
+            </td>
+            <td>
+                <div id='KlassificatorsSel'></div>
+            </td>
+            <td><input style="padding:3px; margin: 5px; width: 90%;" placeholder="Дата начала" id="dateStart" /></td>
+            <td><input style="padding:3px; margin: 5px; width: 90%;" placeholder="Дата окончания" id="dateEnd" /></td>
+        </tr>
+    </table>
 
-            @for (int i = 0; i < Model.Count; i++)
-            {
-                countTd = 0;
-                <tr>
-                    @foreach (var str in Model[i])
-                    {
-                        @if (countTd != 2 && countTd != 3)
-                        {
-                                <td>
-
-                                    @if (countTd == 1)
-                                    {
-                                        <a href="#" onclick="hello(@i)" id="@strTd + @i.ToString();  }">
-                                            @str.ToString().Replace("[", "").Replace("]", "").Trim()
-                                        </a>
-                                    }
-                                    else
-                                    {
-                                        @str.ToString().Replace("[", "").Replace("]", "").Trim()
-                                    }
-
-                                </td>
-                        }
-                          countTd++;
-                    }
-                </tr>
-            }
-
+    <div style="max-height: 400px; max-width: 1200px; overflow: auto; ">
+        <table class="table-bordered table-hover" id="TabReportQ6" style="cursor: pointer;">
         </table>
     </div>
+    <br />
 
-    <div id="chartContainer" style="height: 370px; max-width: 920px; margin: 0px auto;"></div>
+    <div id='chartContainer' style="width:1100px; height:500px">
+    </div>
 
-    <script src="https://canvasjs.com/assets/script/jquery.canvasjs.min.js"></script>
 </body>
 </html>
 
