@@ -16,16 +16,29 @@ namespace FinForum.Controllers
             return View();
         }
 
-        public JsonResult GetData(string strData1, string strData2, int id_kl=1, int RegNumberOfKO=1000, int id_priz=1, int i=1)
+        public JsonResult FillTT_ot_web(int RegNumberOfKO, int id_pr, int id_mes1, int id_mes2)
         {
-            DateTime data1 = Convert.ToDateTime(strData1);
-            DateTime data2 = Convert.ToDateTime(strData2);
-            //  int id_mes1=180, int id_mes2=187,
-            int id_mes1 = DTCrud.GetIdByDate(data1);
-            int id_mes2 = DTCrud.GetIdByDate(data2);
+            DateTime D1 = DTCrud.GetDateFromIdMes(id_mes1);
+            DateTime D2 = DTCrud.GetDateFromIdMes(id_mes2);
 
-            List<string[]> list = Q6Crud.GetAll(id_kl, RegNumberOfKO, id_priz, id_mes1, id_mes2, i);
+            List<string[]> list = Q6Crud.FillTT_ot_web(RegNumberOfKO, id_pr, D1, D2);
             return Json(list);
+        }
+
+        public JsonResult GetData(int id_mes1, int id_mes2, int RegNumberOfKO=1000, int id_priz=1, int i=1)
+        {
+            List<string[]> list = Q6Crud.GetAll(1, RegNumberOfKO, id_priz, id_mes1, id_mes2, i);
+            return Json(list);
+        }
+
+        public JsonResult GetDataQ7(int id_mes1, int id_mes2)
+        {
+            List<string[]> list = Q6Crud.ReportQ7(id_mes1, id_mes2);
+            return Json(list);
+        }
+        public IActionResult IndexQ7()
+        {
+            return View();
         }
 
         public JsonResult GetBanks()
@@ -34,9 +47,15 @@ namespace FinForum.Controllers
             return Json(list);
         }
 
-        public JsonResult GetKlassificators()
+        public JsonResult GetDT()
         {
-            List<Klassificators> list = KlassificatorsCrud.GetAll();
+            List<DT> list = DTCrud.GetAll();
+            return Json(list);
+        }
+
+        public JsonResult GetSysT()
+        {
+            List<sysT> list = sysTCrud.GetAll();
             return Json(list);
         }
     }

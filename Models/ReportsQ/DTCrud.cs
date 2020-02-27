@@ -12,16 +12,36 @@ namespace FinForum.Models.ReportsQ
     public class DTCrud
     {
         private static readonly string strConn = Ut.GetConnetString();
-        public static List<Klassificators> GetAll()
+        public static List<DT> GetAll()
         {
-            List<Klassificators> list = new List<Klassificators>();
+            List<DT> list = new List<DT>();
 
             using (IDbConnection db = new SqlConnection(strConn))
             {
-                list = db.Query<Klassificators>("select id_mes, DT101 from DT;").ToList();
+                list = db.Query<DT>("select id_mes, FORMAT( DT101, 'dd.MM.yyyy', 'ru-RU' ) as DT101 from DT;").ToList();
             }
 
             return list;
+        }
+
+        public static DateTime GetDateFromIdMes(int id_mes)
+        {
+            DateTime date = new DateTime();
+
+            using (IDbConnection db = new SqlConnection(strConn))
+            {
+                try
+                {
+                    date = db.Query<DateTime>($"select DT101 from DT WHERE id_mes = {id_mes}; ").FirstOrDefault();
+                }
+                catch(Exception ex)
+                {
+                    string Error = ex.Message;
+                    int h = 0;
+                }
+            }
+
+            return date;
         }
 
 

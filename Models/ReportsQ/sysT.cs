@@ -5,14 +5,14 @@ using System.Threading.Tasks;
 
 namespace FinForum.Models.ReportsQ
 {
-    public class DT
+    public class sysT
     {
-        public int id_mes { get; set; }
-        public string DT101 { get; set; }
+        public int id { get; set; }
+        public string Web_Friendly { get; set; }
 
         public override string ToString()
         {
-            return DT101;
+            return Web_Friendly;
         }
     }
 }

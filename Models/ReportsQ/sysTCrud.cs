@@ -9,18 +9,18 @@ using System;
 
 namespace FinForum.Models.ReportsQ
 {
-    public class BankCrud
+    public class sysTCrud
     {
         private static readonly string strConn = Ut.GetConnetString();
-        public static List<Bank> GetAll()
+
+        public static List<sysT> GetAll()
         {
-            List<Bank> list = new List<Bank>();
+            List<sysT> list = new List<sysT>();
 
             using (IDbConnection db = new SqlConnection(strConn))
             {
-                list = db.Query<Bank>("Select IntCode, RegNumber, OrgName FROM dbo.List_of_Banks() ORDER BY OrgName;").ToList();
+                list = db.Query<sysT>("select id, Web_Friendly from sysT WHERE Web_visible = 1;").ToList();
             }
-
             return list;
         }
     }

@@ -70,5 +70,119 @@ namespace FinForum.Models.ReportsQ
 
             return list;
         }
+        public static List<string[]> FillTT_ot_web(int RegNumberOfKO,int id_pr, DateTime D1, DateTime D2)
+        {
+            List<string[]> list = new List<string[]>();
+
+            using (IDbConnection db = new SqlConnection(strConn))
+            {
+                var procedure = "[FillTT_ot_web]";
+                var values = new { RegNumberOfKO = RegNumberOfKO, id_pr = id_pr, D1 = D1, D2 = D2 };
+                var results = db.Query(procedure, values, commandType: CommandType.StoredProcedure).ToList();
+
+
+                foreach (IDictionary<string, object> row in results)
+                {
+                    string[] valueTable = new string[row.Keys.Count];
+                    int count = 0;
+                    foreach (string str in row.Keys)
+                    {
+                        if (string.IsNullOrEmpty(str.Trim()))
+                        {
+                            valueTable[count] = "";
+                        }
+                        else
+                        {
+                            valueTable[count] = str;
+                        }
+                        count++;
+                    }
+
+                    list.Add(valueTable);
+                    break;
+                }
+
+                foreach (IDictionary<string, object> row in results)
+                {
+                    string[] valueTable = new string[row.Keys.Count];
+                    int count = 0;
+
+                    foreach (object valuesStr in row.Values)
+                    {
+                        if (valuesStr == null)
+                        {
+                            valueTable[count] = "0";
+                        }
+                        else
+                        {
+                            valueTable[count] = valuesStr.ToString();
+                        }
+
+                        count++;
+                    }
+
+                    list.Add(valueTable);
+                }
+            }
+
+            return list;
+        }
+
+        public static List<string[]> ReportQ7(int id_mes1, int id_mes2)
+        {
+            List<string[]> list = new List<string[]>();
+
+            using (IDbConnection db = new SqlConnection(strConn))
+            {
+                var procedure = "[FillTT_web]";
+                var values = new { id_kl = 1, RegNumberOfKO = 0, id_priz = 1, id_mes1 = id_mes1, id_mes2 = id_mes2, i = 2 };
+                var results = db.Query(procedure, values, commandType: CommandType.StoredProcedure).ToList();
+
+                foreach (IDictionary<string, object> row in results)
+                {
+                    string[] valueTable = new string[row.Keys.Count];
+                    int count = 0;
+                    foreach (string str in row.Keys)
+                    {
+                        if (string.IsNullOrEmpty(str.Trim()))
+                        {
+                            valueTable[count] = "";
+                        }
+                        else
+                        {
+                            valueTable[count] = str;
+                        }
+                        count++;
+                    }
+
+                    list.Add(valueTable);
+                    break;
+                }
+
+                foreach (IDictionary<string, object> row in results)
+                {
+                    string[] valueTable = new string[row.Keys.Count];
+                    int count = 0;
+
+                    foreach (object valuesStr in row.Values)
+                    {
+                        if (valuesStr == null)
+                        {
+                            valueTable[count] = "0";
+                        }
+                        else
+                        {
+                            valueTable[count] = valuesStr.ToString();
+                        }
+
+                        count++;
+                    }
+
+                    list.Add(valueTable);
+                }
+            }
+
+            return list;
+        }
     }
 }

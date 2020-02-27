@@ -1,6 +1,31 @@
-﻿$(document).ready(function () {
+﻿var chartTitle = "";
+
+$(document).ready(function () {
 
     $("#btnRefresh").jqxButton({ theme: 'bootstrap' });
+
+    var sourceSysT = {
+        datatype: "json",
+        datafields: [
+            { name: 'id', type: 'int' },
+            { name: 'web_Friendly', type: 'string' }
+        ],
+        id: 'id',
+        url: '/Reports/GetSysT'
+    };
+
+    var dataAdapterSysT = new $.jqx.dataAdapter(sourceSysT, {
+        contentType: 'application/json; charset=utf-8',
+        autoBind: true,
+        downloadComplete: function (data, textStatus, jqXHR) {
+            return data;
+        }
+    });
+
+    $("#SysTsel").jqxComboBox({
+        source: dataAdapterSysT, width: '175px', height: '25px', promptText: "Выбирай: ", valueMember: 'id',
+        displayMember: 'web_Friendly', selectedIndex: 0
+    });
 
 
     var sourceBank = {
@@ -27,18 +52,17 @@
     });
 
 
-
-    var sourceKlassificators = {
+    var sourceDT = {
         datatype: "json",
         datafields: [
-            { name: 'code', type: 'int' },
-            { name: 'name1', type: 'string' }
+            { name: 'id_mes', type: 'int' },
+            { name: 'dT101', type: 'string' }
         ],
-        id: 'name1',
-        url: '/Reports/GetKlassificators'
+        id: 'id_mes',
+        url: '/Reports/GetDT'
     };
 
-    var dataAdapterKlassificators = new $.jqx.dataAdapter(sourceKlassificators, {
+    var dataAdapterDT = new $.jqx.dataAdapter(sourceDT, {
         contentType: 'application/json; charset=utf-8',
         autoBind: true,
         downloadComplete: function (data, textStatus, jqXHR) {
@@ -46,15 +70,81 @@
         }
     });
 
-    $("#KlassificatorsSel").jqxComboBox({
-        source: dataAdapterKlassificators, width: '175px', height: '25px', promptText: "Выбирай: ", valueMember: 'code',
-        displayMember: 'name1', selectedIndex: 0
+    $("#dateStart").jqxComboBox({
+        source: dataAdapterDT, width: '175px', height: '25px', promptText: "Выбирай: ", valueMember: 'id_mes',
+        displayMember: 'dT101', selectedIndex: 179
     });
 
-    $("#dateStart").jqxDateTimeInput({ width: '170px', height: '25px', culture: 'ru-RU', formatString: 'dd.MM.yyyy', showTimeButton: false });
+    $("#dateEnd").jqxComboBox({
+        source: dataAdapterDT, width: '175px', height: '25px', promptText: "Выбирай: ", valueMember: 'id_mes',
+        displayMember: 'dT101', selectedIndex: 191
+    });
 
-    $("#dateEnd").jqxDateTimeInput({ width: '170px', height: '25px', culture: 'ru-RU', formatString: 'dd.MM.yyyy', showTimeButton: false });
+    $('#BankSel').on('select', function (event) {
+        var args = event.args;
+        if (args) {
+            var item = args.item;
+            chartTitle = item.label;
+        }
+    });
+
 });
+
+function refresh() {
+    var sysT = $("#SysTsel").val();
+
+    if (sysT === 1) {
+        $("#typeReport").val("Q6");
+
+        GetDataReportQ6();
+    }
+    else {
+        $("#typeReport").val("Q6web");
+        FillTT_ot_web();
+    }
+}
+
+function FillTT_ot_web() {
+
+    var RegNumberOfKO = $("#BankSel").val();
+    var id_pr = $("#SysTsel").val();
+
+    var id_mes1 = $("#dateStart").val();
+    var id_mes2 = $("#dateEnd").val();
+    //   FillTT_ot_web(int RegNumberOfKO, int id_pr, int id_mes1, int id_mes2)
+    $.get("/Reports/FillTT_ot_web", { RegNumberOfKO: RegNumberOfKO, id_pr: id_pr, id_mes1: id_mes1, id_mes2: id_mes2 }, null, "json").done(function (data) {
+
+        var table = document.getElementById('TabReportQ6');
+        table.innerHTML = ""; 
+
+        for (var i = 0; i < data.length; i++) {
+
+            var newRow = table.insertRow(-1);
+            newRow.id = "TR" + i;
+            newRow.setAttribute("onclick", "PaintChart('TR" + i + "')");
+
+            for (var j = 1; j < data[i].length-1; j++) {
+
+
+                    var newCell = newRow.insertCell(-1);
+                    newCell.innerText = data[i][j];
+
+                    if (i === 0) {
+                        newCell.setAttribute("style", "text-align: center;");
+                    }
+                    else {
+                        if (j === 2) {
+                            newCell.setAttribute("style", "padding-left: 10px;");
+                        }
+                        else {
+                            newCell.setAttribute("style", "text-align: center;");
+                        }
+                    }
+            }
+        }
+
+    }).fail(function () { alert('Ошибка!'); });
+}
 
 function PaintChart(id) {
 
@@ -75,7 +165,10 @@ function PaintChart(id) {
 
             var title = document.getElementById("TR0").getElementsByTagName("td");
 
-            var chartTitle = els[1].innerText;
+            var typeReport = $("#typeReport").val();  //  "Q6web"
+
+
+
             var dataMin = title[2].innerText;
             var dataMax = title[title.length-1].innerText;
 
@@ -164,22 +257,15 @@ function PaintChart(id) {
 
 function GetDataReportQ6() {
 
-            //, 'birthday': $("#birthdayE").val()
-    //  DateTime data1, DateTime data2, int id_kl=1, int RegNumberOfKO=1000, int id_priz=1, int i=1
-
-    var data1 = $("#dateStart").val();
-    var data2 = $("#dateEnd").val();
+    var id_mes1 = $("#dateStart").val();
+    var id_mes2 = $("#dateEnd").val();
 
     var id_priz = 1;
     var i = 1;
 
-    console.log(data2);
-    debugger;
-
-    var id_k = $("#KlassificatorsSel").val();
     var RegNumberOfKO = $("#BankSel").val();
 
-    $.get("/Reports/GetData", { strData1: data1, strData2: data2, id_k: id_k, RegNumberOfKO: RegNumberOfKO, id_priz: id_priz, i: i  }, null, "json").done(function (data) {
+    $.get("/Reports/GetData", { id_mes1: id_mes1, id_mes2: id_mes2, RegNumberOfKO: RegNumberOfKO, id_priz: id_priz, i: i  }, null, "json").done(function (data) {
 
         var table = document.getElementById('TabReportQ6');
 
