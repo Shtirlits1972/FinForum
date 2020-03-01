@@ -40,6 +40,17 @@ namespace FinForum.Controllers
             return Json(list);
         }
 
+        public IActionResult IndexQ31()
+        {
+            return View();
+        }
+
+        public JsonResult GetDataQ31()
+        {
+            List<top_deposit_rates> list = top_deposit_ratesCrud.GetAll();
+            return Json(list);
+        }
+
         public JsonResult GetDataQ7(int id_mes1, int id_mes2, int sysT)
         {
             List<string[]> list = new List<string[]>();
@@ -68,6 +79,24 @@ namespace FinForum.Controllers
             return View();
         }
 
+        public IActionResult IndexQ3()
+        {
+            return View();
+        }
+
+        public JsonResult DataQ32(string dateTime, string Curr)
+        {
+            DateTime date = Convert.ToDateTime(dateTime);
+
+            List<string[]> list = Q6Crud.ReportQ3_2(date, Curr);
+            return Json(list);
+        }
+
+        public JsonResult DataQ33(int regn, string Curr)
+        {
+            List<string[]> list = Q6Crud.ReportQ_33(regn, Curr);
+            return Json(list);
+        }
         public JsonResult GetDataQ8(int id_M=188, int id_regn= 1481)
         {
             List<string[]> list = Q6Crud.ReportQ8(id_M, id_regn);

@@ -298,5 +298,127 @@ namespace FinForum.Models.ReportsQ
 
             return list;
         }
+
+        public static List<string[]> ReportQ3_2(DateTime Dtt, string CURR)
+        {
+                //declare @Dtt as date = '2019-05-01'
+                //declare @CURR nvarchar(3) = 'USD'
+
+                //Select* FROM dbo.U3194_all_for_one_curr(@Dtt, @CURR)
+
+            List<string[]> list = new List<string[]>();
+
+            using (IDbConnection db = new SqlConnection(strConn))
+            {
+                var results = db.Query("Select * FROM dbo.U3194_all_for_one_curr(@Dtt, @CURR)", new { Dtt = Dtt, CURR = CURR }).ToList();
+
+                foreach (IDictionary<string, object> row in results)
+                {
+                    string[] valueTable = new string[row.Keys.Count];
+                    int count = 0;
+                    foreach (string str in row.Keys)
+                    {
+                        if (string.IsNullOrEmpty(str.Trim()))
+                        {
+                            valueTable[count] = "";
+                        }
+                        else
+                        {
+                            valueTable[count] = str;
+                        }
+                        count++;
+                    }
+
+                    list.Add(valueTable);
+                    break;
+                }
+
+                foreach (IDictionary<string, object> row in results)
+                {
+                    string[] valueTable = new string[row.Keys.Count];
+                    int count = 0;
+
+                    foreach (object valuesStr in row.Values)
+                    {
+                        if (valuesStr == null)
+                        {
+                            valueTable[count] = "0";
+                        }
+                        else
+                        {
+                            valueTable[count] = valuesStr.ToString();
+                        }
+
+                        count++;
+                    }
+
+                    list.Add(valueTable);
+                }
+            }
+
+            return list;
+        }
+
+        public static List<string[]> ReportQ_33(int regn, string CURR)
+        {
+            List<string[]> list = new List<string[]>();
+
+            using (IDbConnection db = new SqlConnection(strConn))
+            {
+                var results = db.Query("select * FROM U3194_for_one_regn(@regn, @CURR) order by Дата;", new { regn = regn, CURR = CURR }).ToList();
+
+                foreach (IDictionary<string, object> row in results)
+                {
+                    string[] valueTable = new string[row.Keys.Count];
+                    int count = 0;
+                    foreach (string str in row.Keys)
+                    {
+                        if (string.IsNullOrEmpty(str.Trim()))
+                        {
+                            valueTable[count] = "";
+                        }
+                        else
+                        {
+                            valueTable[count] = str;
+                        }
+                        count++;
+                    }
+
+                    list.Add(valueTable);
+                    break;
+                }
+
+                foreach (IDictionary<string, object> row in results)
+                {
+                    string[] valueTable = new string[row.Keys.Count];
+                    int count = 0;
+
+                    foreach (object valuesStr in row.Values)
+                    {
+                        if (valuesStr == null)
+                        {
+                            valueTable[count] = "0";
+                        }
+                        else
+                        {
+                            if(count == 0)
+                            {
+                                valueTable[count] = valuesStr.ToString().Substring(0, 10);
+                            }
+                            else
+                            {
+                                valueTable[count] = valuesStr.ToString();
+                            }
+                        }
+
+                        count++;
+                    }
+
+                    list.Add(valueTable);
+                }
+            }
+
+            return list;
+        }
     }
 }
