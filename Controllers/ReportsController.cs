@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using FinForum.Models.ReportsQ;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Text.Json;
 
 namespace FinForum.Controllers
 {
@@ -31,9 +32,30 @@ namespace FinForum.Controllers
             return Json(list);
         }
 
-        public JsonResult GetDataQ7(int id_mes1, int id_mes2)
+        public JsonResult Ranking_on_DT(int id_pr, int id_mes, string kod)
         {
-            List<string[]> list = Q6Crud.ReportQ7(id_mes1, id_mes2);
+            DateTime Dtt = DTCrud.GetDateFromIdMes(id_mes);
+
+            List<string[]> list = Q6Crud.Ranking_on_DT(id_pr, Dtt, kod);
+            return Json(list);
+        }
+
+        public JsonResult GetDataQ7(int id_mes1, int id_mes2, int sysT)
+        {
+            List<string[]> list = new List<string[]>();
+
+            if (sysT == 2)
+            {
+                list = Q6Crud.ReportQ7(id_mes1, id_mes2);
+            }
+            else
+            {
+                DateTime D1 = DTCrud.GetDateFromIdMes(id_mes1);
+                DateTime D2 = DTCrud.GetDateFromIdMes(id_mes2);
+
+                list = Q6Crud.FillTT_ot_web(0, sysT, D1, D2);
+            }
+            
             return Json(list);
         }
         public IActionResult IndexQ7()
@@ -41,6 +63,16 @@ namespace FinForum.Controllers
             return View();
         }
 
+        public IActionResult IndexQ8()
+        {
+            return View();
+        }
+
+        public JsonResult GetDataQ8(int id_M=188, int id_regn= 1481)
+        {
+            List<string[]> list = Q6Crud.ReportQ8(id_M, id_regn);
+            return Json(list);
+        }
         public JsonResult GetBanks()
         {
             List<Bank> list = BankCrud.GetAll();
@@ -58,5 +90,8 @@ namespace FinForum.Controllers
             List<sysT> list = sysTCrud.GetAll();
             return Json(list);
         }
+
+
+     
     }
 }

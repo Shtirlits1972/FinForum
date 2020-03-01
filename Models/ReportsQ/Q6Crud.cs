@@ -70,7 +70,7 @@ namespace FinForum.Models.ReportsQ
 
             return list;
         }
-        public static List<string[]> FillTT_ot_web(int RegNumberOfKO,int id_pr, DateTime D1, DateTime D2)
+        public static List<string[]> FillTT_ot_web(int RegNumberOfKO, int id_pr, DateTime D1, DateTime D2)
         {
             List<string[]> list = new List<string[]>();
 
@@ -128,7 +128,7 @@ namespace FinForum.Models.ReportsQ
             return list;
         }
 
-        public static List<string[]> ReportQ7(int id_mes1, int id_mes2)
+        public static List<string[]> ReportQ7( int id_mes1, int id_mes2)
         {
             List<string[]> list = new List<string[]>();
 
@@ -159,6 +159,120 @@ namespace FinForum.Models.ReportsQ
                     break;
                 }
 
+                foreach (IDictionary<string, object> row in results)
+                {
+                    string[] valueTable = new string[row.Keys.Count];
+                    int count = 0;
+
+                    foreach (object valuesStr in row.Values)
+                    {
+                        if (valuesStr == null)
+                        {
+                            valueTable[count] = "0";
+                        }
+                        else
+                        {
+                            valueTable[count] = valuesStr.ToString();
+                        }
+
+                        count++;
+                    }
+
+                    list.Add(valueTable);
+                }
+            }
+            return list;
+        }
+
+        public static List<string[]> Ranking_on_DT(int id_pr, DateTime Dtt, string kod )
+        {
+            List<string[]> list = new List<string[]>();
+
+            using (IDbConnection db = new SqlConnection(strConn))
+            {
+                var procedure = "[Ranking_on_DT]";
+                var values = new { id_pr = id_pr, Dtt = Dtt.ToString("yyyy-MM-dd"), kod = kod };
+                var results = db.Query(procedure, values, commandType: CommandType.StoredProcedure).ToList();
+
+
+                foreach (IDictionary<string, object> row in results)
+                {
+                    string[] valueTable = new string[row.Keys.Count];
+                    int count = 0;
+                    foreach (string str in row.Keys)
+                    {
+                        if (string.IsNullOrEmpty(str.Trim()))
+                        {
+                            valueTable[count] = "";
+                        }
+                        else
+                        {
+                            valueTable[count] = str;
+                        }
+                        count++;
+                    }
+
+                    list.Add(valueTable);
+                    break;
+                }
+
+                foreach (IDictionary<string, object> row in results)
+                {
+                    string[] valueTable = new string[row.Keys.Count];
+                    int count = 0;
+
+                    foreach (object valuesStr in row.Values)
+                    {
+                        if (valuesStr == null)
+                        {
+                            valueTable[count] = "0";
+                        }
+                        else
+                        {
+                            valueTable[count] = valuesStr.ToString();
+                        }
+
+                        count++;
+                    }
+
+                    list.Add(valueTable);
+                }
+            }
+
+            return list;
+        }
+
+        public static List<string[]> ReportQ8(int id_M, int id_regn)
+        {
+            List<string[]> list = new List<string[]>();
+            using (IDbConnection db = new SqlConnection(strConn))
+            {
+                string strCommand = "SELECT kod,[lev], [name1], Val_St, Cl_Act, Val_Cl_Act,[Share], X_RankingUSER, [ShareWithOUTfil_perc] FROM dbo.[StructureBalansGraph](@id_M, @id_regn, 1, 1, 8) ORDER BY Cl_Act, lev;";
+                var results = db.Query(strCommand, new { id_M = id_M, id_regn = id_regn }).ToList();
+
+                //  шапка
+                foreach (IDictionary<string, object> row in results)
+                {
+                    string[] valueTable = new string[row.Keys.Count];
+                    int count = 0;
+                    foreach (string str in row.Keys)
+                    {
+                        if (string.IsNullOrEmpty(str.Trim()))
+                        {
+                            valueTable[count] = "";
+                        }
+                        else
+                        {
+                            valueTable[count] = str;
+                        }
+                        count++;
+                    }
+
+                    list.Add(valueTable);
+                    break;
+                }
+
+                //  тело таблицы
                 foreach (IDictionary<string, object> row in results)
                 {
                     string[] valueTable = new string[row.Keys.Count];

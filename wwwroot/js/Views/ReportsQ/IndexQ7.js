@@ -30,7 +30,28 @@
         displayMember: 'dT101', selectedIndex: 191
     });
 
+    var sourceSysT = {
+        datatype: "json",
+        datafields: [
+            { name: 'id', type: 'int' },
+            { name: 'web_Friendly', type: 'string' }
+        ],
+        id: 'id',
+        url: '/Reports/GetSysT'
+    };
 
+    var dataAdapterSysT = new $.jqx.dataAdapter(sourceSysT, {
+        contentType: 'application/json; charset=utf-8',
+        autoBind: true,
+        downloadComplete: function (data, textStatus, jqXHR) {
+            return data;
+        }
+    });
+
+    $("#SysTsel").jqxComboBox({
+        source: dataAdapterSysT, width: '175px', height: '25px', promptText: "Выбирай: ", valueMember: 'id',
+        displayMember: 'web_Friendly', selectedIndex: 0
+    });
 
 });
 
@@ -38,12 +59,16 @@ function refresh() {
 
     var id_mes1 = $("#dateStart").val();
     var id_mes2 = $("#dateEnd").val();
+    var sysT = $("#SysTsel").val();
 
-    $.get("/Reports/GetDataQ7", { id_mes1: id_mes1, id_mes2: id_mes2 }, null, "json").done(function (data) {
+    $.get("/Reports/GetDataQ7", { id_mes1: id_mes1, id_mes2: id_mes2, sysT: sysT }, null, "json").done(function (data) {
 
         var table = document.getElementById('TabReportQ7');
-
         table.innerHTML = "";
+
+        var table2 = document.getElementById('TabSpec');
+        table2.innerHTML = "";
+
         for (var i = 0; i < data.length; i++) {
 
             var newRow = table.insertRow(-1);
@@ -52,27 +77,41 @@ function refresh() {
 
             for (var j = 0; j < data[i].length; j++) {
 
-                if (j !== 2 && j !== 3) {
-                    var newCell = newRow.insertCell(-1);
-                    newCell.innerText = data[i][j];
+                if (sysT === 2) {
+                    if (j !== 2 && j !== 3) {
+                        var newCell = newRow.insertCell(-1);
+                        newCell.innerText = data[i][j];
 
-                    if (i === 0) {
-                        newCell.setAttribute("style", "text-align: center;");
-                    }
-                    else {
-                        if (j === 1) {
-                            newCell.setAttribute("style", "padding-left: 10px;");
-                        }
-                        else {
+                        if (i === 0) {
                             newCell.setAttribute("style", "text-align: center;");
                         }
+                        else {
+                            if (j === 1) {
+                                newCell.setAttribute("style", "padding-left: 10px;");
+                            }
+                            else {
+                                newCell.setAttribute("style", "text-align: center;");
+                            }
+                        }
                     }
+                }
+                if (sysT === 8) {
+
+                        var newCell3 = newRow.insertCell(-1);
+                        newCell3.innerText = data[i][j];
+
+                    if (i === 0) {
+                        newCell3.setAttribute("style", "text-align: center;");
+                    }
+                    else {
+                            newCell3.setAttribute("style", "text-align: center;");                       
+                    }
+                   
                 }
             }
         }
     }).fail(function () { alert('Ошибка!'); });
 }
-
 
 function PaintChart(id) {
 
@@ -85,6 +124,12 @@ function PaintChart(id) {
                 }
 
                 if (id !== 0) {
+
+                    var sysT2 = $("#SysTsel").val();
+                    if (sysT2 === 8) {
+                        Ranking_on_DT(sysT2, id);
+                    }
+
                     var els = document.getElementById(id).getElementsByTagName("td");
 
                     for (var j = 0; j < els.length; j++) {
@@ -178,4 +223,41 @@ function PaintChart(id) {
                     $('#chartContainer').jqxChart(settings);
                 }
             }
+}
+
+function Ranking_on_DT(sysT21, trId) {
+    var tdList = document.getElementById(trId).getElementsByTagName("td");
+
+    var id_mes = $("#dateEnd").val();
+    var kod = tdList[0].innerText;
+
+    $.get("/Reports/Ranking_on_DT", { id_pr: sysT21, id_mes: id_mes, kod: kod }, null, "json").done(function (data) {
+
+        var table = document.getElementById('TabSpec');
+        table.innerHTML = "";
+
+        for (var i = 0; i < data.length; i++) {
+
+            var newRow = table.insertRow(-1);
+
+            for (var j = 0; j < data[i].length; j++) {
+
+                    var newCell = newRow.insertCell(-1);
+                    newCell.innerText = data[i][j];
+
+                    if (i === 0) {
+                        newCell.setAttribute("style", "text-align: center;");
+                    }
+                    else {
+                        if (j === 3) {
+                            newCell.setAttribute("style", "padding-left: 10px;");
+                        }
+                        else {
+                            newCell.setAttribute("style", "text-align: center;");
+                        }
+                    }             
+            }
         }
+    }).fail(function () { alert('Ошибка!'); });
+
+}
