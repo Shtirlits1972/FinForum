@@ -12,7 +12,6 @@ namespace FinForum.Models.ReportsQ
     public class Q6Crud
     {
         private static readonly string strConn = Ut.GetConnetString();
-
         public static List<string[]> GetAll(int id_kl = 1, int RegNumberOfKO = 1000, int id_priz = 1, int id_mes1 = 180, int id_mes2 = 187, int i = 1)
         {
             List<string[]> list = new List<string[]>();
@@ -127,7 +126,6 @@ namespace FinForum.Models.ReportsQ
 
             return list;
         }
-
         public static List<string[]> ReportQ7( int id_mes1, int id_mes2)
         {
             List<string[]> list = new List<string[]>();
@@ -194,7 +192,6 @@ namespace FinForum.Models.ReportsQ
                 var values = new { id_pr = id_pr, Dtt = Dtt.ToString("yyyy-MM-dd"), kod = kod };
                 var results = db.Query(procedure, values, commandType: CommandType.StoredProcedure).ToList();
 
-
                 foreach (IDictionary<string, object> row in results)
                 {
                     string[] valueTable = new string[row.Keys.Count];
@@ -229,7 +226,14 @@ namespace FinForum.Models.ReportsQ
                         }
                         else
                         {
-                            valueTable[count] = valuesStr.ToString();
+                            if(count == 1)
+                            {
+                                valueTable[count] = valuesStr.ToString().Substring(0, 10);
+                            }
+                            else
+                            {
+                                valueTable[count] = valuesStr.ToString();
+                            }
                         }
 
                         count++;
@@ -241,13 +245,12 @@ namespace FinForum.Models.ReportsQ
 
             return list;
         }
-
         public static List<string[]> ReportQ8(int id_M, int id_regn)
         {
             List<string[]> list = new List<string[]>();
             using (IDbConnection db = new SqlConnection(strConn))
             {
-                string strCommand = "SELECT kod,[lev], [name1], Val_St, Cl_Act, Val_Cl_Act,[Share], X_RankingUSER, [ShareWithOUTfil_perc] FROM dbo.[StructureBalansGraph](@id_M, @id_regn, 1, 1, 8) ORDER BY Cl_Act, lev;";
+                string strCommand = "SELECT kod,[lev], [name1], Val_St, Cl_Act, Val_Cl_Act,[Share], X_RankingUSER, [ShareWithOUTfil_perc] FROM dbo.[StructureBalansGraph](@id_M, @id_regn, 1, 1, 8);";
                 var results = db.Query(strCommand, new { id_M = id_M, id_regn = id_regn }).ToList();
 
                 //  шапка
@@ -298,14 +301,8 @@ namespace FinForum.Models.ReportsQ
 
             return list;
         }
-
         public static List<string[]> ReportQ3_2(DateTime Dtt, string CURR)
         {
-                //declare @Dtt as date = '2019-05-01'
-                //declare @CURR nvarchar(3) = 'USD'
-
-                //Select* FROM dbo.U3194_all_for_one_curr(@Dtt, @CURR)
-
             List<string[]> list = new List<string[]>();
 
             using (IDbConnection db = new SqlConnection(strConn))
@@ -358,7 +355,6 @@ namespace FinForum.Models.ReportsQ
 
             return list;
         }
-
         public static List<string[]> ReportQ_33(int regn, string CURR)
         {
             List<string[]> list = new List<string[]>();

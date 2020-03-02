@@ -1,21 +1,5 @@
 ﻿$(document).ready(function () {
 
-
-
-    //var sourceCountry = {
-    //    datatype: "json",
-    //    datafields: [
-    //        { name: 'id', type: 'int' },
-    //        { name: 'countryName', type: 'string' }
-    //    ],
-    //    id: 'id',
-    //    url: '/Country/GetData'
-    //};
-
-    //string decade { get; set; }
-    //decimal RAte { get; set; }
-    //DateTime dataRes { get; set; }
-
     var source =
     {
         url: '/Reports/GetDataQ31',
@@ -32,8 +16,6 @@
     var dataAdapter = new $.jqx.dataAdapter(source, { autoBind: true });
     var months = ['Янв', 'Фев', 'Март', 'Апр', 'Май', 'Июнь', 'Июль', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'];
 
-    //console.log(dataAdapter.records);
-    //debugger;
 
     var settings = {
         title: "Заголовок отчёта",
@@ -48,12 +30,14 @@
             dataField: 'dataRes',
             formatFunction: function (value) {
                 return value.getDate() + '.' + months[value.getMonth()] + '.' + value.getFullYear();
+
             },
             type: 'date',
-            baseUnit: 'month',
+            baseUnit: 'year',
             valuesOnTicks: true,
-            minValue: "01.01.2018",
-            maxValue: "01.01.2020",
+
+            minValue: "01.01.2010",
+            //maxValue: "01.01.2021",
             tickMarks: {
                 visible: true,
                 interval: 1,
@@ -81,9 +65,9 @@
         seriesGroups:
             [
                 {
-                    type: 'line',
+                    type: 'stepline',
                     series: [
-                        { dataField: 'rAte', displayText: "RAte" }
+                        { dataField: 'rAte', displayText: "Ставка" }
                     ]
                 }
             ]

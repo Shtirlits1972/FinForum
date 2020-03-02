@@ -77,7 +77,7 @@ function refresh() {
 
             for (var j = 0; j < data[i].length; j++) {
 
-                if (sysT === 2) {
+                if (sysT === 1) {
                     if (j !== 2 && j !== 3) {
                         var newCell = newRow.insertCell(-1);
                         newCell.innerText = data[i][j];
@@ -95,7 +95,7 @@ function refresh() {
                         }
                     }
                 }
-                if (sysT === 8) {
+                else {
 
                         var newCell3 = newRow.insertCell(-1);
                         newCell3.innerText = data[i][j];
@@ -126,7 +126,7 @@ function PaintChart(id) {
                 if (id !== 0) {
 
                     var sysT2 = $("#SysTsel").val();
-                    if (sysT2 === 8) {
+                    if (sysT2 !== 1) {
                         Ranking_on_DT(sysT2, id);
                     }
 
@@ -229,7 +229,15 @@ function Ranking_on_DT(sysT21, trId) {
     var tdList = document.getElementById(trId).getElementsByTagName("td");
 
     var id_mes = $("#dateEnd").val();
-    var kod = tdList[0].innerText;
+    var kod;
+
+    if (sysT21 === 2 || sysT21 === 4) {
+        kod = tdList[0].innerText;
+    }
+    else {
+        kod = tdList[1].innerText;
+    }
+
 
     $.get("/Reports/Ranking_on_DT", { id_pr: sysT21, id_mes: id_mes, kod: kod }, null, "json").done(function (data) {
 

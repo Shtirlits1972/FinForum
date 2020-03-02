@@ -16,7 +16,6 @@ namespace FinForum.Controllers
         {
             return View();
         }
-
         public JsonResult FillTT_ot_web(int RegNumberOfKO, int id_pr, int id_mes1, int id_mes2)
         {
             DateTime D1 = DTCrud.GetDateFromIdMes(id_mes1);
@@ -25,13 +24,11 @@ namespace FinForum.Controllers
             List<string[]> list = Q6Crud.FillTT_ot_web(RegNumberOfKO, id_pr, D1, D2);
             return Json(list);
         }
-
         public JsonResult GetData(int id_mes1, int id_mes2, int RegNumberOfKO=1000, int id_priz=1, int i=1)
         {
             List<string[]> list = Q6Crud.GetAll(1, RegNumberOfKO, id_priz, id_mes1, id_mes2, i);
             return Json(list);
         }
-
         public JsonResult Ranking_on_DT(int id_pr, int id_mes, string kod)
         {
             DateTime Dtt = DTCrud.GetDateFromIdMes(id_mes);
@@ -44,18 +41,16 @@ namespace FinForum.Controllers
         {
             return View();
         }
-
         public JsonResult GetDataQ31()
         {
             List<top_deposit_rates> list = top_deposit_ratesCrud.GetAll();
             return Json(list);
         }
-
         public JsonResult GetDataQ7(int id_mes1, int id_mes2, int sysT)
         {
             List<string[]> list = new List<string[]>();
 
-            if (sysT == 2)
+            if (sysT == 1)
             {
                 list = Q6Crud.ReportQ7(id_mes1, id_mes2);
             }
@@ -73,29 +68,41 @@ namespace FinForum.Controllers
         {
             return View();
         }
-
         public IActionResult IndexQ8()
         {
             return View();
         }
-
         public IActionResult IndexQ3()
         {
             return View();
         }
-
-        public JsonResult DataQ32(string dateTime, string Curr)
+        public JsonResult DataQ32(int id_mes, string Curr)
         {
-            DateTime date = Convert.ToDateTime(dateTime);
+            DateTime date = DTCrud.GetDateFromIdMes(id_mes);
 
             List<string[]> list = Q6Crud.ReportQ3_2(date, Curr);
             return Json(list);
         }
-
-        public JsonResult DataQ33(int regn, string Curr)
+        public JsonResult DataQ33(int regn)
         {
-            List<string[]> list = Q6Crud.ReportQ_33(regn, Curr);
-            return Json(list);
+            List<string[]> listUSD = Q6Crud.ReportQ_33(regn, "USD");
+            listUSD.RemoveAt(0);
+
+            List<string[]> listEUR = Q6Crud.ReportQ_33(regn, "EUR");
+            listEUR.RemoveAt(0);
+
+            List<string[]> listRUB = Q6Crud.ReportQ_33(regn, "RUB");
+            listRUB.RemoveAt(0);
+
+            var model = new {
+
+                listUSD = listUSD,
+                listEUR = listEUR,
+                listRUB = listRUB
+                
+            };
+
+            return Json(model);
         }
         public JsonResult GetDataQ8(int id_M=188, int id_regn= 1481)
         {
@@ -107,13 +114,11 @@ namespace FinForum.Controllers
             List<Bank> list = BankCrud.GetAll();
             return Json(list);
         }
-
         public JsonResult GetDT()
         {
             List<DT> list = DTCrud.GetAll();
             return Json(list);
         }
-
         public JsonResult GetSysT()
         {
             List<sysT> list = sysTCrud.GetAll();
