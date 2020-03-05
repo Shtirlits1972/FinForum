@@ -36,7 +36,6 @@ namespace FinForum.Controllers
             List<string[]> list = Q6Crud.Ranking_on_DT(id_pr, Dtt, kod);
             return Json(list);
         }
-
         public IActionResult IndexQ31()
         {
             return View();
@@ -124,8 +123,11 @@ namespace FinForum.Controllers
             List<sysT> list = sysTCrud.GetAll();
             return Json(list);
         }
+        public JsonResult GetNormals()
+        {
+            List<Normals> list = NormalsCrud.GetAll();
+            return Json(list);
+        }
 
-
-     
     }
 }

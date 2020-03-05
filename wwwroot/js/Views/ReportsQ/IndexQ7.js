@@ -1,6 +1,7 @@
 ﻿$(document).ready(function () {
 
     $("#dateRanking").hide();
+    $("#selNormals").hide();
 
     $("#btnRefresh").jqxButton({ theme: 'bootstrap' });
 
@@ -60,6 +61,28 @@
         displayMember: 'web_Friendly', selectedIndex: 0
     });
 
+    var sourceNormals = {
+        datatype: "json",
+        datafields: [
+            { name: 'coeff', type: 'string' },
+            { name: 'nameofN', type: 'string' }
+        ],
+        id: 'coeff',
+        url: '/Reports/GetNormals'
+    };
+
+    var dataAdapterNormals = new $.jqx.dataAdapter(sourceNormals, {
+        contentType: 'application/json; charset=utf-8',
+        autoBind: true,
+        downloadComplete: function (data, textStatus, jqXHR) {
+            return data;
+        }
+    });
+
+    $("#selNormals").jqxComboBox({
+        source: dataAdapterNormals, width: '175px', height: '25px', promptText: "Выбирай: ", valueMember: 'coeff',
+        displayMember: 'nameofN', selectedIndex: 0
+    });
 });
 
 function refresh() {
@@ -67,62 +90,83 @@ function refresh() {
     var id_mes1 = $("#dateStart").val();
     var id_mes2 = $("#dateEnd").val();
     var sysT = $("#SysTsel").val();
+    var table = document.getElementById('TabReportQ7');
+    table.innerHTML = "";
+    debugger;
 
-    $.get("/Reports/GetDataQ7", { id_mes1: id_mes1, id_mes2: id_mes2, sysT: sysT }, null, "json").done(function (data) {
+    if (sysT === 9) {
+        $('#chartContainer').css("display", "none");
+        $("#dateRanking").css("display", "block");
+        $("#selNormals").css("display", "block");
+        Ranking_on_DT(sysT, "TR0");
+    }
+    else {
+        $.get("/Reports/GetDataQ7", { id_mes1: id_mes1, id_mes2: id_mes2, sysT: sysT }, null, "json").done(function (data) {
 
-        var table = document.getElementById('TabReportQ7');
-        table.innerHTML = "";
+            var table2 = document.getElementById('TabSpec');
+            table2.innerHTML = "";
 
-        var table2 = document.getElementById('TabSpec');
-        table2.innerHTML = "";
+            $('#chartContainer').css("display", "none");
 
-        for (var i = 0; i < data.length; i++) {
+            for (var i = 0; i < data.length; i++) {
 
-            var newRow = table.insertRow(-1);
-            newRow.id = "TR" + i;
-            newRow.setAttribute("onclick", "PaintChart('TR" + i + "')");
+                if (sysT !== 9) {
+                    var newRow = table.insertRow(-1);
+                    newRow.id = "TR" + i;
+                    newRow.setAttribute("onclick", "PaintChart('TR" + i + "')");
+                }
 
-            for (var j = 0; j < data[i].length; j++) {
+                for (var j = 0; j < data[i].length; j++) {
 
-                if (sysT === 1) {
-                    if (j !== 2 && j !== 3) {
-                        var newCell = newRow.insertCell(-1);
-                        newCell.innerText = data[i][j];
+                    if (sysT === 1) {
+                        if (j !== 2 && j !== 3) {
+                            var newCell = newRow.insertCell(-1);
+                            newCell.innerText = data[i][j];
 
-                        if (i === 0) {
-                            newCell.setAttribute("style", "text-align: center;");
-                        }
-                        else {
-                            if (j === 1) {
-                                newCell.setAttribute("style", "padding-left: 10px;");
-                            }
-                            else {
+                            if (i === 0) {
                                 newCell.setAttribute("style", "text-align: center;");
                             }
+                            else {
+                                if (j === 1) {
+                                    newCell.setAttribute("style", "padding-left: 10px;");
+                                }
+                                else {
+                                    newCell.setAttribute("style", "text-align: center;");
+                                }
+                            }
                         }
-                    }
-                    //  
-                //    document.getElementById('thRankingData').innerText = "";
-                    $("#dateRanking").css("display", "none");
-                }
-                else {
-
-                        var newCell3 = newRow.insertCell(-1);
-                        newCell3.innerText = data[i][j];
-
-                    if (i === 0) {
-                        newCell3.setAttribute("style", "text-align: center;");
+                        //  
+                        $('#chartContainer').css("display", "block");
+                        $("#dateRanking").css("display", "none");
+                        $("#selNormals").css("display", "none");
                     }
                     else {
-                            newCell3.setAttribute("style", "text-align: center;");                       
+
+                        if (sysT !== 9) {
+
+                            var newCell3 = newRow.insertCell(-1);
+                            newCell3.innerText = data[i][j];
+
+                            if (i === 0) {
+                                newCell3.setAttribute("style", "text-align: center;");
+                            }
+                            else {
+                                newCell3.setAttribute("style", "text-align: center;");
+                            }
+                            $('#chartContainer').css("display", "block");
+                            $("#selNormals").css("display", "none");
+                        }
+
+                        $("#dateRanking").css("display", "block");
+
+                        if (sysT === 9) {
+                            $("#selNormals").css("display", "block");
+                        }
                     }
-                  //  document.getElementById('thRankingData').innerText = "Дата для X_Ranking";
-                    //$("#dateRanking").show("fast");
-                    $("#dateRanking").css("display", "block");
                 }
             }
-        }
-    }).fail(function () { alert('Ошибка!'); });
+        }).fail(function () { alert('Ошибка!'); });
+    }
 }
 
 function PaintChart(id) {
@@ -232,13 +276,24 @@ function PaintChart(id) {
                                 }
                             ]
                     };
+
+                    $('#chartContainer').height("500px");
                     $('#chartContainer').jqxChart(settings);
+                 
                 }
             }
 }
 
 function Ranking_on_DT(sysT21, trId) {
-    var tdList = document.getElementById(trId).getElementsByTagName("td");
+
+    console.log(sysT21, trId);
+    debugger;
+
+    var tdList;
+    if (sysT21 !== 9) {
+        tdList = document.getElementById(trId).getElementsByTagName("td");
+    }
+   
 
     var id_mes = $("#dateRanking").val();
     var kod;
@@ -246,10 +301,13 @@ function Ranking_on_DT(sysT21, trId) {
     if (sysT21 === 2 || sysT21 === 4) {
         kod = tdList[0].innerText;
     }
+    else if (sysT21 === 9)
+    {
+        kod = $("#selNormals").val();
+    }
     else {
         kod = tdList[1].innerText;
     }
-
 
     $.get("/Reports/Ranking_on_DT", { id_pr: sysT21, id_mes: id_mes, kod: kod }, null, "json").done(function (data) {
 
