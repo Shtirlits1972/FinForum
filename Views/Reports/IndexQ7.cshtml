@@ -19,12 +19,13 @@
     <p>2.1, 2.2, 2.3</p>
     <br />
 
-    <table style="max-width: 1200px; width: 1200px;">
+    <table style="max-width: 1200px; width: 1200px;" id="tableMenu" name="tableMenu">
         <tr>
             <th></th>
             <th>SysT</th>
             <th>начало периода</th>
             <th>окончание периода</th>
+            <th id="thRankingData"></th>
         </tr>
 
         <tr>
@@ -40,7 +41,9 @@
             <td>
                 <div id='dateEnd'></div>
             </td>
-
+            <td>
+                <div id='dateRanking'></div>
+            </td>
         </tr>
     </table>
 
@@ -52,7 +55,9 @@
 
     <div id='chartContainer' style="width:1100px; height:500px">
     </div>
-    <hr />
+
+   
+
     <div style="max-height: 400px; max-width: 1200px; overflow: auto; ">
         <table class="table-bordered table-hover" id="TabSpec" style="cursor: pointer; width: 100%;">
         </table>

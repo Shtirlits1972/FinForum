@@ -114,7 +114,7 @@ namespace FinForum.Models.ReportsQ
                         }
                         else
                         {
-                            valueTable[count] = valuesStr.ToString();
+                            valueTable[count] = valuesStr.ToString().Replace(",", ".");
                         }
 
                         count++;

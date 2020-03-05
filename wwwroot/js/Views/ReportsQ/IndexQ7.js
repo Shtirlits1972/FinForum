@@ -1,5 +1,7 @@
 ﻿$(document).ready(function () {
 
+    $("#dateRanking").hide();
+
     $("#btnRefresh").jqxButton({ theme: 'bootstrap' });
 
     var sourceDT = {
@@ -22,12 +24,17 @@
 
     $("#dateStart").jqxComboBox({
         source: dataAdapterDT, width: '175px', height: '25px', promptText: "Выбирай: ", valueMember: 'id_mes',
-        displayMember: 'dT101', selectedIndex: 179
+        displayMember: 'dT101', selectedIndex: 12
     });
 
     $("#dateEnd").jqxComboBox({
         source: dataAdapterDT, width: '175px', height: '25px', promptText: "Выбирай: ", valueMember: 'id_mes',
-        displayMember: 'dT101', selectedIndex: 191
+        displayMember: 'dT101', selectedIndex: 0
+    });
+
+    $("#dateRanking").jqxComboBox({
+        source: dataAdapterDT, width: '175px', height: '25px', promptText: "Выбирай:", valueMember: 'id_mes',
+        displayMember: 'dT101', selectedIndex: 0
     });
 
     var sourceSysT = {
@@ -94,6 +101,9 @@ function refresh() {
                             }
                         }
                     }
+                    //  
+                //    document.getElementById('thRankingData').innerText = "";
+                    $("#dateRanking").css("display", "none");
                 }
                 else {
 
@@ -106,7 +116,9 @@ function refresh() {
                     else {
                             newCell3.setAttribute("style", "text-align: center;");                       
                     }
-                   
+                  //  document.getElementById('thRankingData').innerText = "Дата для X_Ranking";
+                    //$("#dateRanking").show("fast");
+                    $("#dateRanking").css("display", "block");
                 }
             }
         }
@@ -228,7 +240,7 @@ function PaintChart(id) {
 function Ranking_on_DT(sysT21, trId) {
     var tdList = document.getElementById(trId).getElementsByTagName("td");
 
-    var id_mes = $("#dateEnd").val();
+    var id_mes = $("#dateRanking").val();
     var kod;
 
     if (sysT21 === 2 || sysT21 === 4) {

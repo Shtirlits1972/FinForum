@@ -18,7 +18,7 @@ namespace FinForum.Models.ReportsQ
 
             using (IDbConnection db = new SqlConnection(strConn))
             {
-                list = db.Query<DT>("select id_mes, FORMAT( DT101, 'dd.MM.yyyy', 'ru-RU' ) as DT101 from DT;").ToList();
+                list = db.Query<DT>("select id_mes, FORMAT( DT101, 'dd.MM.yyyy', 'ru-RU' ) as DT101 from DT ORDER BY id_mes DESC;").ToList();
             }
 
             return list;
@@ -37,7 +37,6 @@ namespace FinForum.Models.ReportsQ
                 catch(Exception ex)
                 {
                     string Error = ex.Message;
-                    int h = 0;
                 }
             }
 

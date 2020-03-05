@@ -48,7 +48,7 @@ $(document).ready(function () {
 
     $("#BankSel").jqxComboBox({
         source: dataAdapterBank, width: '175px', height: '25px', promptText: "Выбирай: ", valueMember: 'regNumber',
-        displayMember: 'orgName', selectedIndex: 0
+        displayMember: 'orgName', selectedIndex: 186
     });
 
 
@@ -72,12 +72,12 @@ $(document).ready(function () {
 
     $("#dateStart").jqxComboBox({
         source: dataAdapterDT, width: '175px', height: '25px', promptText: "Выбирай: ", valueMember: 'id_mes',
-        displayMember: 'dT101', selectedIndex: 179
+        displayMember: 'dT101', selectedIndex: 13
     });
 
     $("#dateEnd").jqxComboBox({
         source: dataAdapterDT, width: '175px', height: '25px', promptText: "Выбирай: ", valueMember: 'id_mes',
-        displayMember: 'dT101', selectedIndex: 191
+        displayMember: 'dT101', selectedIndex: 0
     });
 
     $('#BankSel').on('select', function (event) {

@@ -22,7 +22,7 @@
 
     $("#BankSel").jqxComboBox({
         source: dataAdapterBank, width: '175px', height: '25px', promptText: "Выбирай: ", valueMember: 'regNumber',
-        displayMember: 'orgName', selectedIndex: 186
+        displayMember: 'orgName', selectedIndex: 725
     });
 
     var sourceDT = {
@@ -45,7 +45,7 @@
 
     $("#dateStart").jqxComboBox({
         source: dataAdapterDT, width: '175px', height: '25px', promptText: "Выбирай: ", valueMember: 'id_mes',
-        displayMember: 'dT101', selectedIndex: 179
+        displayMember: 'dT101', selectedIndex: 4
     });
 
 });
@@ -55,19 +55,7 @@ function refresh() {
     var id_M = $("#dateStart").val();
     var id_regn = $("#BankSel").val();
 
-    $.get("/Reports/GetDataQ8", { id_M: id_M, id_regn: id_regn  }, null, "json").done(function (data) {
-
-        var table = document.getElementById('TabReportQ8');
-
-        table.innerHTML = "";
-
-        if (data.length === 0) {
-            var emptyRow = table.insertRow(-1);
-
-            var newCell1 = emptyRow.insertCell(-1);
-            newCell1.innerText = 'Нет данных';
-            newCell1.setAttribute("style", "text-align: center;");
-        }
+    $.get("/Reports/GetDataQ8", { id_M: id_M, id_regn: id_regn }, null, "json").done(function (data) {
 
         var arrA1 = [];
         var arrP1 = [];
@@ -75,70 +63,69 @@ function refresh() {
         var arrA2 = [];
         var arrP2 = [];
 
+        var SumA1 = 0;
+        var SumA2 = 0;
+
+        var SumP1 = 0;
+        var SumP2 = 0;
 
         for (var i = 0; i < data.length; i++) {
-
-            var newRow = table.insertRow(-1);
-            newRow.id = "TR" + i;
-            //newRow.setAttribute("onclick", "PaintChart('TR" + i + "')");
-
-            for (var j = 0; j < data[i].length; j++) {
-
-                if ( j > 1 ) {
-                    var newCell = newRow.insertCell(-1);
-                    newCell.innerText = data[i][j];
-
-                    if (i === 0) {
-                        newCell.setAttribute("style", "text-align: center;");
-                    }
-                    else {
-                            newCell.setAttribute("style", "padding-left: 10px;");
-
-                        if (j !== 2) {                        
-                            newCell.setAttribute("style", "text-align: center;");
-                        }
-                    }
-                }
-            }
 
             if (i > 0) {
 
                 var tmp = {
                     nameArticle: data[i][2],
-                    valueOf: data[i][8]
+                    valueOf: Number(data[i][3])
                 };
 
                 if (data[i][4] === "107") {
 
                     if (data[i][1] === "1") {
                         arrA1.push(tmp);
+                        SumA1 += tmp.valueOf;
                     }
                     else {
                         arrA2.push(tmp);
+                        SumA2 += tmp.valueOf;
                     }
-                    
                 }
-                else if (data[i][4] === "210"){
+                else if (data[i][4] === "210") {
 
                     if (data[i][1] === "1") {
                         arrP1.push(tmp);
+                        SumP1 += tmp.valueOf;
                     }
                     else {
                         arrP2.push(tmp);
+                        SumP2 += tmp.valueOf;
                     }
                 }
-
             }
-
         }
 
-        PaintChart(arrA1, arrA2, arrP1, arrP2 );
+        for (var a = 0; a < arrA1.length; a++) {
+            arrA1[a].valueOf = (arrA1[a].valueOf/SumA1) * 100;
+        }
+
+        for (var a2 = 0; a2 < arrA2.length; a2++) {
+            arrA2[a2].valueOf = (arrA2[a2].valueOf / SumA2) * 100;
+        }
+
+        for (var a3 = 0; a3 < arrP1.length; a3++) {
+            arrP1[a3].valueOf = (arrP1[a3].valueOf / SumP1) * 100;
+        }
+
+        for (var a4 = 0; a4 < arrP2.length; a4++) {
+            arrP2[a4].valueOf = (arrP2[a4].valueOf / SumP2) * 100;
+        }
+
+        PaintChart(arrA1, arrA2, arrP1, arrP2);
 
     }).fail(function () { alert('Ошибка!'); });
 }
 
 
-function PaintChart(arrA1, arrA2, arrP1, arrP2 ) {
+function PaintChart(arrA1, arrA2, arrP1, arrP2) {
 
     var sourceA1 =
     {
@@ -151,7 +138,7 @@ function PaintChart(arrA1, arrA2, arrP1, arrP2 ) {
             ]
     };
 
-    var dataAdapterA1 = new $.jqx.dataAdapter(sourceA1, { autoBind: true});
+    var dataAdapterA1 = new $.jqx.dataAdapter(sourceA1, { autoBind: true });
 
     var sourceA2 =
     {
@@ -205,6 +192,7 @@ function PaintChart(arrA1, arrA2, arrP1, arrP2 ) {
             [
                 {
                     type: 'donut',
+                    //showLabels: true,
                     offsetX: 250,
                     source: dataAdapterA1,
                     xAxis:
@@ -218,16 +206,17 @@ function PaintChart(arrA1, arrA2, arrP1, arrP2 ) {
                                 displayText: 'nameArticle',
                                 labelRadius: 120,
                                 initialAngle: 0,
-                                radius: 100,
+                                radius: 110,
                                 innerRadius: 30,
                                 centerOffset: 0,
-                                formatSettings: { sufix: '%', decimalPlaces: 1 }
+                                formatSettings: { decimalPlaces: 0 }
                             }
                         ]
                 },
                 {
                     type: 'donut',
                     offsetX: 250,
+                    //showLabels: true,
                     source: dataAdapterA2,
                     xAxis:
                     {
@@ -238,12 +227,12 @@ function PaintChart(arrA1, arrA2, arrP1, arrP2 ) {
                             {
                                 dataField: 'valueOf',
                                 displayText: 'nameArticle',
-                                labelRadius: 140,
+                                labelRadius: 120,
                                 initialAngle: 0,
                                 radius: 130,
                                 innerRadius: 120,
                                 centerOffset: 0,
-                                formatSettings: { sufix: '%', decimalPlaces: 1 }
+                                formatSettings: { decimalPlaces: 0 }
                             }
                         ]
                 }
@@ -265,6 +254,7 @@ function PaintChart(arrA1, arrA2, arrP1, arrP2 ) {
             [
                 {
                     type: 'donut',
+                    //showLabels: true,
                     offsetX: 250,
                     source: dataAdapterP1,
                     xAxis:
@@ -278,15 +268,16 @@ function PaintChart(arrA1, arrA2, arrP1, arrP2 ) {
                                 displayText: 'nameArticle',
                                 labelRadius: 120,
                                 initialAngle: 0,
-                                radius: 70,
+                                radius: 110,
                                 innerRadius: 30,
                                 centerOffset: 0,
-                                formatSettings: { sufix: '%', decimalPlaces: 1 }
+                                formatSettings: { decimalPlaces: 0 }
                             }
                         ]
                 },
                 {
                     type: 'donut',
+                    //showLabels: true,
                     offsetX: 250,
                     source: dataAdapterP2,
                     xAxis:
@@ -301,9 +292,9 @@ function PaintChart(arrA1, arrA2, arrP1, arrP2 ) {
                                 labelRadius: 120,
                                 initialAngle: 0,
                                 radius: 130,
-                                innerRadius: 90,
+                                innerRadius: 120,
                                 centerOffset: 0,
-                                formatSettings: { sufix: '%', decimalPlaces: 1 }
+                                formatSettings: { decimalPlaces: 0 }
                             }
                         ]
                 }
