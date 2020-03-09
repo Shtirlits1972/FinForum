@@ -193,12 +193,12 @@ function buildTopicElem(topicInput) {
     var dataCreate = ConvertStringData(topicInput.dataCreate);
 
     var strComment = '';
-    var UserId = getUserId();
+    //var UserId = getUserId();
 
-    var strbtnComment = "";
-    if (UserId > 0) {
-        strbtnComment += '<a href="#" class="btn btn-outline-info btn-xs py-0" onclick="AddNewMessage(' + topicInput.id + ', 0 )">комментировать</a>';
-    }
+    //var strbtnComment = "";
+    //if (UserId > 0) {
+      var strbtnComment = '<a href="#" class="btn btn-outline-info btn-xs py-0" onclick="AddNewMessage(' + topicInput.id + ', 0 )">комментировать</a>';
+    //}
 
     for (var j = 0; j < topicInput.listMessages.length; j++) {
 
@@ -213,7 +213,7 @@ function buildTopicElem(topicInput) {
         '<td  style="padding: 0px;">' + topicInput.title +
         '&nbsp;&nbsp;  <a href="#"  style="font-size: small;" id="openHref' + topicInput.id + '" onclick="openDiv(' + topicInput.id + ')">развернуть</a>' +
         '</td>' +
-        '<td  style="padding: 0px; width: 100px;">' + topicInput.userFio + '</td>' +
+        '<td  style="padding: 0px; width: 100px;">' + topicInput.authorName + '</td>' +
         '<td  style="padding: 0px; width: 100px; text-align:center; ">' + dataCreate + '</td>' +
         '</tr>' +
         '<tr style="height: 100px; max-height: 100px;"><td colspan="3">' +
@@ -240,12 +240,12 @@ function buildCommentElem(comment, topicId, ListComment) {
 
     var dataComment = ConvertStringData(comment.dataMess);
 
-    var strButtonComments = '';
-    var UserId = getUserId();
+    //var strButtonComments = '';
+    //var UserId = getUserId();
 
-    if (UserId > 0 && UserId !== undefined && UserId !== null) {
-        strButtonComments = '<button class="btn btn-link btn-sm" onclick="AddNewMessage(' + topicId + ', ' + comment.id + ' )">ответить</button> ';
-    }
+    //if (UserId > 0 && UserId !== undefined && UserId !== null) {
+    var strButtonComments = '<button class="btn btn-link btn-sm" onclick="AddNewMessage(' + topicId + ', ' + comment.id + ' )">ответить</button> ';
+    //}
 
     var strClildComments = '';
 
@@ -260,7 +260,7 @@ function buildCommentElem(comment, topicId, ListComment) {
 
     var strComment = '<div id="divComment" style="border: solid; border-width:thin; border-color: lightgray; margin-left: 20px;">' +
         '<div style="height: 7px;">' +
-      '<span>&nbsp;&nbsp;' + comment.userFio + '&nbsp;</span> ' +
+        '<span>&nbsp;&nbsp;' + comment.authorName + '&nbsp;</span> ' +
 
         strButtonComments +
 
@@ -358,6 +358,10 @@ function AddCommentLink() {
 
     var linkAdress = $("#linkAdressComment").val(); // адрес ссылки
     var linkText = $("#linkTextComment").val();     // текст ссылки
+
+    if (linkText.length === 0) {
+        linkText = 'ссылка';
+    }
 
     var Link = '<a href="' + linkAdress + '">' + linkText + '</a>';
 

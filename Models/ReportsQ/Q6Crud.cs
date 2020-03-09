@@ -12,7 +12,7 @@ namespace FinForum.Models.ReportsQ
     public class Q6Crud
     {
         private static readonly string strConn = Ut.GetConnetString();
-        public static List<string[]> GetAll(int id_kl = 1, int RegNumberOfKO = 1000, int id_priz = 1, int id_mes1 = 180, int id_mes2 = 187, int i = 1)
+        public static List<string[]> GetAll(int id_kl, int RegNumberOfKO, int id_priz, int id_mes1, int id_mes2, int i)
         {
             List<string[]> list = new List<string[]>();
 
@@ -78,7 +78,6 @@ namespace FinForum.Models.ReportsQ
                 var procedure = "[FillTT_ot_web]";
                 var values = new { RegNumberOfKO = RegNumberOfKO, id_pr = id_pr, D1 = D1, D2 = D2 };
                 var results = db.Query(procedure, values, commandType: CommandType.StoredProcedure).ToList();
-
 
                 foreach (IDictionary<string, object> row in results)
                 {
@@ -181,7 +180,6 @@ namespace FinForum.Models.ReportsQ
             }
             return list;
         }
-
         public static List<string[]> Ranking_on_DT(int id_pr, DateTime Dtt, string kod )
         {
             List<string[]> list = new List<string[]>();
@@ -414,6 +412,61 @@ namespace FinForum.Models.ReportsQ
                 }
             }
 
+            return list;
+        }
+        //  Bubble_Chart
+        public static List<string[]> Bubble_Chart(int id_pr, DateTime Dtt, string kod)
+        {
+            List<string[]> list = new List<string[]>();
+            using (IDbConnection db = new SqlConnection(strConn))
+            {
+                var procedure = "[Bubble_Chart]";
+                var values = new { id_pr = id_pr,  Dtt = Dtt,  kod = kod };
+                var results = db.Query(procedure, values, commandType: CommandType.StoredProcedure).ToList();
+
+                foreach (IDictionary<string, object> row in results)
+                {
+                    string[] valueTable = new string[row.Keys.Count];
+                    int count = 0;
+                    foreach (string str in row.Keys)
+                    {
+                        if (string.IsNullOrEmpty(str.Trim()))
+                        {
+                            valueTable[count] = "";
+                        }
+                        else
+                        {
+                            valueTable[count] = str;
+                        }
+                        count++;
+                    }
+
+                    list.Add(valueTable);
+                    break;
+                }
+
+                foreach (IDictionary<string, object> row in results)
+                {
+                    string[] valueTable = new string[row.Keys.Count];
+                    int count = 0;
+
+                    foreach (object valuesStr in row.Values)
+                    {
+                        if (valuesStr == null)
+                        {
+                            valueTable[count] = "0";
+                        }
+                        else
+                        {
+                            valueTable[count] = valuesStr.ToString();
+                        }
+
+                        count++;
+                    }
+
+                    list.Add(valueTable);
+                }
+            }
             return list;
         }
     }

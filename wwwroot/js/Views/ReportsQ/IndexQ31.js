@@ -53,12 +53,29 @@
                 angle: -45,
                 rotationPoint: 'topright',
                 offset: { x: 0, y: -25 }
+            },
+            rangeSelector: {
+                // Uncomment the line below to render the selector in a separate container 
+                //renderTo: $('#selectorContainer'),
+                size: 80,
+                padding: { /*left: 0, right: 0,*/top: 0, bottom: 0 },
+                minValue: "01.01.2010",
+                backgroundColor: 'white',
+                dataField: 'rAte',
+                baseUnit: 'year',
+                gridLines: { visible: false },
+                serieType: 'area',
+                labels: {
+                    formatFunction: function (value) {
+                        return months[value.getMonth()] + '\'' + value.getFullYear().toString();
+                    }
+                }
             }
         },
         valueAxis:
         {
             visible: true,
-            title: { text: 'рублей' },
+            title: { text: '%' },
             tickMarks: { color: '#BCBCBC' }
         },
         colorScheme: 'scheme04',

@@ -16,6 +16,13 @@ namespace FinForum.Controllers
     {
         public IActionResult Index()
         {
+            //          EXEC[Bubble_Chart]
+
+            //      @id_pr = 12,
+            //@Dtt = '2019-04-01',
+            //@kod = N'320;305;2'
+
+
             return View();
         }
 
@@ -25,18 +32,22 @@ namespace FinForum.Controllers
             return Json(list);
         }
 
-        [Authorize]
         [HttpPost]
         public IActionResult AddMessagess(int TopicId, int MessagesId, string TextMess)
         {
             try
             {
-                int intUserId = int.Parse(User.Claims.ToList()[0].Value);
-                string userFio = User.Claims.ToList()[1].Value;
+                string AuthorName = "аноним";
+
+                if (User.Identity.IsAuthenticated)
+                {
+                    int intUserId = int.Parse(User.Claims.ToList()[0].Value);
+                    AuthorName = User.Claims.ToList()[1].Value;
+                }
 
                 DateTime date = DateTime.Now;
 
-                Messagess model = new Messagess {  ParentMessageId = MessagesId, TopicId = TopicId, Text = TextMess, DataMess = date, AuthorId = intUserId, userFio = userFio };
+                Messagess model = new Messagess {  ParentMessageId = MessagesId, TopicId = TopicId, Text = TextMess, DataMess = date, AuthorName = AuthorName };
 
                 model = MessagessCrud.Insert(model);
                 return Ok(model);

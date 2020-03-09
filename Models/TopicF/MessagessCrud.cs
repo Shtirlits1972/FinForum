@@ -16,7 +16,7 @@ namespace FinForum.Models.TopicF
 
             using (IDbConnection db = new SqlConnection(strConn))
             {
-                list = db.Query<Messagess>("SELECT Id, TopicId, AuthorId, userFio, ParentMessageId, [Text], DataMess FROM MessagessView WHERE TopicId = @TopicId;", new { TopicId }).ToList();
+                list = db.Query<Messagess>("SELECT Id, TopicId, AuthorName, ParentMessageId, [Text], DataMess FROM Messagess WHERE TopicId = @TopicId;", new { TopicId }).ToList();
             }
 
             return list;
@@ -28,7 +28,7 @@ namespace FinForum.Models.TopicF
 
             using (IDbConnection db = new SqlConnection(strConn))
             {
-                model = db.Query<Messagess>("SELECT Id, TopicId, AuthorId, userFio, ParentMessageId, [Text], DataMess FROM MessagessView WHERE Id = @Id;", new { Id }).FirstOrDefault();
+                model = db.Query<Messagess>("SELECT Id, TopicId, AuthorName, ParentMessageId, [Text], DataMess FROM Messagess WHERE Id = @Id;", new { Id }).FirstOrDefault();
             }
 
             return model;
@@ -45,7 +45,7 @@ namespace FinForum.Models.TopicF
         {
             using (IDbConnection db = new SqlConnection(strConn))
             {
-                var Query = "UPDATE Messagess SET TopicId = @TopicId, AuthorId = @AuthorId, ParentMessageId = @ParentMessageId, [Text] = @Text, DataMess = @DataMess  WHERE Id = @Id;";
+                var Query = "UPDATE Messagess SET TopicId = @TopicId, AuthorName = @AuthorName, ParentMessageId = @ParentMessageId, [Text] = @Text, DataMess = @DataMess  WHERE Id = @Id;";
                 db.Execute(Query, model);
             }
         }
@@ -53,7 +53,7 @@ namespace FinForum.Models.TopicF
         {
             using (IDbConnection db = new SqlConnection(strConn))
             {
-                var Query = "INSERT INTO Messagess (TopicId, AuthorId, ParentMessageId, [Text], DataMess ) VALUES(@TopicId, @AuthorId, @ParentMessageId, @Text, @DataMess ); SELECT CAST(SCOPE_IDENTITY() as int)";
+                var Query = "INSERT INTO Messagess (TopicId, AuthorName, ParentMessageId, [Text], DataMess ) VALUES(@TopicId, @AuthorName, @ParentMessageId, @Text, @DataMess ); SELECT CAST(SCOPE_IDENTITY() as int)";
                 int Id = db.Query<int>(Query, model).FirstOrDefault();
                 model.Id = Id;
             }

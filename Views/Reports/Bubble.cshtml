@@ -1,0 +1,55 @@
+﻿<html>
+<head>
+    <title>Бублики</title>
+
+    <script src="~/js/Views/ReportsQ/BubbleChart.js"></script>
+
+    <script src="~/js/JQWidgets/jqxchart.js"></script>
+    <script src="~/js/JQWidgets/jqxchart.api.js"></script>
+    <script src="~/js/JQWidgets/jqxchart.core.js"></script>
+    <script src="~/js/JQWidgets/jqxchart.annotations.js"></script>
+    <script src="~/js/JQWidgets/jqxchart.rangeselector.js"></script>
+    <script src="~/js/JQWidgets/jqxchart.waterfall.js"></script>
+    <script src="~/js/JQWidgets/jqxdraw.js"></script>
+    <script src="~/js/JQWidgets/jqxdata.js"></script>
+
+</head>
+<body>
+
+    <table style="width: 1100px;">
+        <thead>
+            <tr style="text-align: center;">
+                <th></th>
+                <th>Дата</th>
+                <th>X</th>
+                <th>Y</th>
+                <th>Z</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <button type="button" id="btnRefresh" name="btnRefresh" onclick="refresh()">ОБНОВИТЬ</button>
+                </td>
+                <td>
+                    <div id='dateReport'></div>
+                </td>
+                <td>
+                    <div id='kodX'></div>
+                </td>
+                <td>
+                    <div id='kodY'></div>
+                </td>
+                <td>
+                    <div id='kodZ'></div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div id='chartContainer' style="width:1100px; height:1000px">
+    </div>
+
+</body>
+</html>
+

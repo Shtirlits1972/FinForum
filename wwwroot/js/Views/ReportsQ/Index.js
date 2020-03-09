@@ -123,7 +123,7 @@ function FillTT_ot_web() {
             newRow.id = "TR" + i;
             newRow.setAttribute("onclick", "PaintChart('TR" + i + "')");
 
-            for (var j = 1; j < data[i].length-1; j++) {
+            for (var j = 0; j < data[i].length; j++) {
 
 
                     var newCell = newRow.insertCell(-1);
@@ -133,7 +133,7 @@ function FillTT_ot_web() {
                         newCell.setAttribute("style", "text-align: center;");
                     }
                     else {
-                        if (j === 2) {
+                        if (j === 1) {
                             newCell.setAttribute("style", "padding-left: 10px;");
                         }
                         else {
@@ -166,8 +166,6 @@ function PaintChart(id) {
             var title = document.getElementById("TR0").getElementsByTagName("td");
 
             var typeReport = $("#typeReport").val();  //  "Q6web"
-
-
 
             var dataMin = title[2].innerText;
             var dataMax = title[title.length-1].innerText;

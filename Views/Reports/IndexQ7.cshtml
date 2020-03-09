@@ -3,6 +3,9 @@
     <title>Отчёт Q7(2.1, 2.2, 2.3)</title>
 
     <script src="~/js/Views/ReportsQ/IndexQ7.js"></script>
+    <script src="~/js/Views/ReportsQ/table_sort.js"></script>
+
+    <link rel="stylesheet" href="~/css/View/table_sort.css" />
 
     <script src="~/js/JQWidgets/jqxchart.js"></script>
     <script src="~/js/JQWidgets/jqxchart.api.js"></script>
@@ -12,6 +15,8 @@
     <script src="~/js/JQWidgets/jqxchart.waterfall.js"></script>
     <script src="~/js/JQWidgets/jqxdraw.js"></script>
     <script src="~/js/JQWidgets/jqxdata.js"></script>
+
+
 
 </head>
 <body>
@@ -60,11 +65,11 @@
     <div id='chartContainer' style="width:1100px; height:10px">
     </div>
 
-   
-
     <div style="max-height: 400px; max-width: 1200px; overflow: auto; ">
-        <table class="table-bordered table-hover" id="TabSpec" style="cursor: pointer; width: 100%;">
+
+        <table class="table_sort" id="TabSpec" style="cursor: pointer; width: 100%;">
         </table>
+
     </div>
 
 </body>

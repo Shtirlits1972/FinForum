@@ -16,6 +16,17 @@ namespace FinForum.Controllers
         {
             return View();
         }
+        public IActionResult Bubble()
+        {
+            return View();
+        }
+        public JsonResult Bubble_Chart(int id_mes, string kod)
+        {
+            DateTime dateTime = DTCrud.GetDateFromIdMes(id_mes);
+            List<string[]> list = Q6Crud.Bubble_Chart(12, dateTime, kod);
+
+            return Json(list);
+        }
         public JsonResult FillTT_ot_web(int RegNumberOfKO, int id_pr, int id_mes1, int id_mes2)
         {
             DateTime D1 = DTCrud.GetDateFromIdMes(id_mes1);
@@ -24,7 +35,7 @@ namespace FinForum.Controllers
             List<string[]> list = Q6Crud.FillTT_ot_web(RegNumberOfKO, id_pr, D1, D2);
             return Json(list);
         }
-        public JsonResult GetData(int id_mes1, int id_mes2, int RegNumberOfKO=1000, int id_priz=1, int i=1)
+        public JsonResult GetData(int id_mes1, int id_mes2, int RegNumberOfKO, int id_priz, int i=1)
         {
             List<string[]> list = Q6Crud.GetAll(1, RegNumberOfKO, id_priz, id_mes1, id_mes2, i);
             return Json(list);
@@ -128,6 +139,10 @@ namespace FinForum.Controllers
             List<Normals> list = NormalsCrud.GetAll();
             return Json(list);
         }
-
+        public JsonResult GetX_Rank_us_guide_bko()
+        {
+            List<X_Rank_us_guide_bko> list = X_Rank_us_guide_bkoCrud.GetAll();
+            return Json(list);
+        }
     }
 }
