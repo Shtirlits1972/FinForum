@@ -1,5 +1,10 @@
 ﻿function refresh() {
 
+    google.charts.load("current", { packages: ["corechart"] });
+    google.charts.setOnLoadCallback(drawChart);
+}
+
+function drawChart() {
     var id_mes = $("#dateReport").val();
 
     var kodX = $("#kodX").val();
@@ -8,99 +13,124 @@
 
     var kod = kodX + ';' + kodY + ';' + kodZ;
 
-    $.get("/Reports/Bubble_Chart", { id_mes: id_mes, kod: kod }, null, "json").done(function (data) {
+    var listBanks = $("#bankSel").jqxComboBox('getCheckedItems');
+
+    var strBankIds = "";
+
+    for (var i = 0; i < listBanks.length; i++) {
+
+
+        if (i === 0) {
+            strBankIds += listBanks[i].value;
+        }
+        else if (i > 0) {
+            strBankIds += "," + listBanks[i].value;
+        }
+    }
+
+    $.get("/Reports/Bubble_Chart", { id_mes: id_mes, kod: kod, strBankIds: strBankIds }, null, "json").done(function (data) {
 
         if (data.length > 1) {
 
             var bubbleArr = [];
 
-            var minVal = 0;
-            var maxVal = Number(data[1][3].toString().replace(',', '.'));
+            var head = ['ID', 'X', 'Y','color', 'Z'];
+            bubbleArr.push(head);
 
             for (var i = 1; i < data.length; i++) {
 
-                if (Number(data[i][3].replace(',', '.')) > maxVal) {
-                    maxVal = Number(data[i][3].replace(',', '.'));
-                }
-
-                if (Number(data[i][4].replace(',', '.')) > maxVal) {
-                    maxVal = Number(data[i][4].replace(',', '.'));
-                }
-
-                if (Number(data[i][3].replace(',', '.')) < minVal) {
-                    minVal = Number(data[i][3].replace(',', '.'));
-                }
-
-                if (Number(data[i][4].replace(',', '.')) < minVal) {
-                    minVal = Number(data[i][4].replace(',', '.'));
-                }
-
-                var tmp = {
-                    'orgName': data[i][2],
-                    'X': Number(data[i][3].replace(',', '.')),
-                    'Y': Number(data[i][4].replace(',', '.')),
-                    'Z': Number(data[i][5].replace(',', '.'))
-                };
+                var tmp = [
+                    data[i][2],
+                    Number(data[i][3].replace(',', '.')),
+                    Number(data[i][4].replace(',', '.')),
+                    data[i][2],
+                    Number(data[i][5].replace(',', '.'))
+                ];
 
                 bubbleArr.push(tmp);
             }
 
-            var InterVal = Number(maxVal.toString().replace(',', '.')) - Number(minVal.toString().replace(',', '.'));
-            var newInt = getInterval(InterVal);
 
-            debugger;
+            var dataChart = google.visualization.arrayToDataTable(bubbleArr);
 
-            var settings = {
-                title: "Bubble Chart",
-                description: "Описание",
-                enableAnimations: true,
-                showLegend: true,
-                padding: { left: 5, top: 5, right: 5, bottom: 5 },
-                titlePadding: { left: 90, top: 0, right: 0, bottom: 10 },
-                source: bubbleArr,
-                colorScheme: 'scheme04',
-                xAxis:
-                {
-                    dataField: 'orgName',
-                    valuesOnTicks: false
-                },
-                valueAxis:
-                {
-                    unitInterval: newInt,
-                    minValue: minVal,
-                    maxValue: maxVal,
-                    title: { text: 'Показатель ($)<br>' },
-                    labels: {
-                        formatSettings: { prefix: '$', thousandsSeparator: ' ' },
-                        horizontalAlignment: 'right'
-                    }
-                },
-                seriesGroups:
-                    [
-                        {
-                            type: 'bubble',
-                            series: [
-                                { dataField: 'X', radiusDataField: 'Z', minRadius: 5, maxRadius: 100, displayText: 'X' },
-                                { dataField: 'Y', radiusDataField: 'Z', minRadius: 5, maxRadius: 100, displayText: 'Y' }
-                            ]
-                        }
-                    ]
+            var options = {
+                title: 'Заголовок',
+                hAxis: { title: 'X' },
+                vAxis: { title: 'Y' },
+                bubble: { textStyle: { fontSize: 11 } }
+                //colorAxis: { colors: ['yellow', 'red'] }
             };
 
-            debugger;
-            // setup the chart
-            $('#chartContainer').jqxChart(settings);
+            var chart = new google.visualization.BubbleChart(document.getElementById('chartContainer'));
+            chart.draw(dataChart, options);
+
+            //  DrawTable
+            var table = document.getElementById('TabBubble');
+            table.innerHTML = ""; 
+
+            var header = table.createTHead();
+            var headRow = header.insertRow(0); 
+
+            for (var t = 0; t < 6;t++) {
+                var th = document.createElement('th');
+                th.setAttribute("style", "text-align: center; background-color:lightgray;");
+
+                if (t === 0) {
+                    th.innerText = "Дата";
+                }
+                else if (t===1) {
+                    th.innerText = "Рег №";
+                }
+                else if (t === 2) {
+                    th.innerText = "Название";
+                }
+                else if (t === 3) {
+                    th.innerText = "X";
+                }
+                else if (t === 4) {
+                    th.innerText = "Y";
+                }
+                else if (t === 5) {
+                    th.innerText = "Z";
+                }
+
+                headRow.appendChild(th);
+            }
+
+            for (var k = 1; k < data.length; k++) {
+
+                var newRow = table.insertRow(-1);
+                for (var j = 0; j < data[k].length; j++) {
+
+                    var newCell = newRow.insertCell(-1);
+                    
+                    if (j === 0) {
+                        newCell.innerText = data[k][j].substring(0, 10);
+                        newCell.setAttribute("style", "text-align: center;");
+                    }
+                    else {
+                        newCell.innerText = data[k][j];
+
+                        if (j !== 2) {
+                            newCell.setAttribute("style", "text-align: center;");
+                        }
+                        else {
+                            newCell.setAttribute("style", "padding-left: 10px;");
+                        }
+                    }
+                }
+            }
         }
 
     }).fail(function () {
         alert('Ошибка!');
     });
+
 }
 
 function getInterval(numInput) {
 
     var intOut = 1;
-
     try {
         if (numInput > 1) {
             var lenInput = numInput.toString().length - 1;
@@ -180,20 +210,28 @@ $(document).ready(function () {
         displayMember: 'namePok', selectedIndex: 0
     });
 
+    var sourceBank = {
+        datatype: "json",
+        datafields: [
+            { name: 'regNumber', type: 'int' },
+            { name: 'orgName', type: 'string' }
+        ],
+        id: 'regNumber',
+        url: '/Reports/GetBanks'
+    };
 
-    $(document).ready(function () {
-        // prepare chart data as an array
-        //var sampleData = [
-        //    { City: 'New York', SalesQ1: 310500, SalesQ2: 210500, YoYGrowthQ1: 1.05, YoYGrowthQ2: 1.25 },
-        //    { City: 'London', SalesQ1: 120000, SalesQ2: 169000, YoYGrowthQ1: 1.15, YoYGrowthQ2: 0.95 },
-        //    { City: 'Paris', SalesQ1: 205000, SalesQ2: 275500, YoYGrowthQ1: 1.45, YoYGrowthQ2: 1.15 },
-        //    { City: 'Tokyo', SalesQ1: 187000, SalesQ2: 130100, YoYGrowthQ1: 0.45, YoYGrowthQ2: 0.55 },
-        //    { City: 'Berlin', SalesQ1: 187000, SalesQ2: 113000, YoYGrowthQ1: 1.65, YoYGrowthQ2: 1.05 },
-        //    { City: 'San Francisco', SalesQ1: 142000, SalesQ2: 102000, YoYGrowthQ1: 0.75, YoYGrowthQ2: 0.15 },
-        //    { City: 'Chicago', SalesQ1: 171000, SalesQ2: 124000, YoYGrowthQ1: 0.75, YoYGrowthQ2: 0.65 }
-        //];
-        // prepare jqxChart settings
-
-
+    var dataAdapterBank = new $.jqx.dataAdapter(sourceBank, {
+        contentType: 'application/json; charset=utf-8',
+        autoBind: true,
+        downloadComplete: function (data, textStatus, jqXHR) {
+            return data;
+        }
     });
+
+    $("#bankSel").jqxComboBox({
+        source: dataAdapterBank, width: '200px', height: '25px', promptText: "Выбирай: ", valueMember: 'regNumber',
+        displayMember: 'orgName', checkboxes: true, multiSelect: true
+    });
+
+    $("#bankSel").jqxComboBox('checkIndex', 0);
 });

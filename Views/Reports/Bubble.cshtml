@@ -3,15 +3,14 @@
     <title>Бублики</title>
 
     <script src="~/js/Views/ReportsQ/BubbleChart.js"></script>
+    <script src="~/js/Views/ReportsQ/GoogleChart.js"></script>
 
-    <script src="~/js/JQWidgets/jqxchart.js"></script>
-    <script src="~/js/JQWidgets/jqxchart.api.js"></script>
-    <script src="~/js/JQWidgets/jqxchart.core.js"></script>
-    <script src="~/js/JQWidgets/jqxchart.annotations.js"></script>
-    <script src="~/js/JQWidgets/jqxchart.rangeselector.js"></script>
-    <script src="~/js/JQWidgets/jqxchart.waterfall.js"></script>
-    <script src="~/js/JQWidgets/jqxdraw.js"></script>
+    <script src="~/js/JQWidgets/jqxcombobox.js"></script>
+    <script src="~/js/JQWidgets/jqxcore.js"></script>
+    <script src="~/js/JQWidgets/jqxlistbox.js"></script>
+    <script src="~/js/JQWidgets/jqxcheckbox.js"></script>
     <script src="~/js/JQWidgets/jqxdata.js"></script>
+    <script src="~/js/JQWidgets/jqxscrollbar.js"></script>
 
 </head>
 <body>
@@ -21,6 +20,7 @@
             <tr style="text-align: center;">
                 <th></th>
                 <th>Дата</th>
+                <th>Банки</th>
                 <th>X</th>
                 <th>Y</th>
                 <th>Z</th>
@@ -35,6 +35,9 @@
                     <div id='dateReport'></div>
                 </td>
                 <td>
+                    <div id='bankSel' name="bankSel"></div>
+                </td>
+                <td>
                     <div id='kodX'></div>
                 </td>
                 <td>
@@ -47,9 +50,33 @@
         </tbody>
     </table>
 
-    <div id='chartContainer' style="width:1100px; height:1000px">
+    <div id='chartContainer' style="width:1100px; height:800px">
+    </div>
+
+    <div style="max-height: 400px; max-width: 1200px; overflow: auto; ">
+        <table class="table-bordered table-hover" id="TabBubble"  style="cursor: pointer; width: 100%;">
+            @*<thead>
+                <tr>
+                    <th style="background-color:lightgray;">1</th>
+                    <th style="background-color:lightgray;">2</th>
+                    <th style="background-color:lightgray;">3</th>
+                    <th style="background-color:lightgray;">4</th>
+                    <th style="background-color:lightgray;">5</th>
+                </tr>
+            </thead>*@
+        </table>
     </div>
 
 </body>
 </html>
 
+
+
+@*<script src="~/js/JQWidgets/jqxchart.js"></script>
+    <script src="~/js/JQWidgets/jqxchart.api.js"></script>
+    <script src="~/js/JQWidgets/jqxchart.core.js"></script>
+    <script src="~/js/JQWidgets/jqxchart.annotations.js"></script>
+    <script src="~/js/JQWidgets/jqxchart.rangeselector.js"></script>
+    <script src="~/js/JQWidgets/jqxchart.waterfall.js"></script>
+    <script src="~/js/JQWidgets/jqxdraw.js"></script>
+    <script src="~/js/JQWidgets/jqxdata.js"></script>*@

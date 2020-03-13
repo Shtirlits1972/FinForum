@@ -107,7 +107,7 @@ function getTopicByNum(index) {
     }
 
     $.get("/Home/GetData", { page: index, take: 5, strLike: strLike }, null, "json").done(function (data) {
-
+        debugger;
         buildPaginator(data.intLength);
 
         topicIndex = index;
@@ -191,7 +191,7 @@ function getUserId() {
 
 function buildTopicElem(topicInput) {
     var dataCreate = ConvertStringData(topicInput.dataCreate);
-
+    debugger;
     var strComment = '';
     //var UserId = getUserId();
 
@@ -213,7 +213,7 @@ function buildTopicElem(topicInput) {
         '<td  style="padding: 0px;">' + topicInput.title +
         '&nbsp;&nbsp;  <a href="#"  style="font-size: small;" id="openHref' + topicInput.id + '" onclick="openDiv(' + topicInput.id + ')">развернуть</a>' +
         '</td>' +
-        '<td  style="padding: 0px; width: 100px;">' + topicInput.authorName + '</td>' +
+        '<td  style="padding: 0px; width: 100px;">' + topicInput.userFio + '</td>' +
         '<td  style="padding: 0px; width: 100px; text-align:center; ">' + dataCreate + '</td>' +
         '</tr>' +
         '<tr style="height: 100px; max-height: 100px;"><td colspan="3">' +
@@ -260,7 +260,7 @@ function buildCommentElem(comment, topicId, ListComment) {
 
     var strComment = '<div id="divComment" style="border: solid; border-width:thin; border-color: lightgray; margin-left: 20px;">' +
         '<div style="height: 7px;">' +
-        '<span>&nbsp;&nbsp;' + comment.authorName + '&nbsp;</span> ' +
+        '<span>&nbsp;&nbsp;' + comment.userFio + '&nbsp;</span> ' +
 
         strButtonComments +
 

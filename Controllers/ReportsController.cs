@@ -20,12 +20,37 @@ namespace FinForum.Controllers
         {
             return View();
         }
-        public JsonResult Bubble_Chart(int id_mes, string kod)
+        public JsonResult Bubble_Chart(int id_mes, string kod, string strBankIds="")
         {
+            string[] bankIds;
+
+            if (!String.IsNullOrEmpty(strBankIds))
+            {
+                bankIds = strBankIds.Trim().Split(',');
+            }
+             else
+            {
+                bankIds = new string [] { "" };
+            }
+
             DateTime dateTime = DTCrud.GetDateFromIdMes(id_mes);
             List<string[]> list = Q6Crud.Bubble_Chart(12, dateTime, kod);
 
-            return Json(list);
+            List<string[]> listRes = new List<string[]>();
+            listRes.Add(list[0]);
+
+            if (bankIds.Length > 0 )
+            {
+                for(int i=1; i< list.Count; i++)
+                {
+                    if (bankIds.Contains(list[i][1].Trim()))
+                    {
+                        listRes.Add(list[i]);
+                    }
+                }
+            }
+
+            return Json(listRes.OrderBy(x => x[2]));
         }
         public JsonResult FillTT_ot_web(int RegNumberOfKO, int id_pr, int id_mes1, int id_mes2)
         {

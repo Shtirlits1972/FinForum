@@ -22,7 +22,7 @@
 
     $("#dateSel").jqxComboBox({
         source: dataAdapterDT, width: '175px', height: '25px', promptText: "Выбирай: ", valueMember: 'id_mes',
-        displayMember: 'dT101', selectedIndex: 179
+        displayMember: 'dT101', selectedIndex: 0
     });
 });
 

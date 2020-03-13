@@ -16,13 +16,6 @@ namespace FinForum.Controllers
     {
         public IActionResult Index()
         {
-            //          EXEC[Bubble_Chart]
-
-            //      @id_pr = 12,
-            //@Dtt = '2019-04-01',
-            //@kod = N'320;305;2'
-
-
             return View();
         }
 
