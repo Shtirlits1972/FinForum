@@ -248,7 +248,8 @@ namespace FinForum.Models.ReportsQ
             List<string[]> list = new List<string[]>();
             using (IDbConnection db = new SqlConnection(strConn))
             {
-                string strCommand = "SELECT kod,[lev], [name1], Val_St, Cl_Act, Val_Cl_Act,[Share], X_RankingUSER, [ShareWithOUTfil_perc] FROM dbo.[StructureBalansGraph](@id_M, @id_regn, 1, 1, 8);";
+                string strCommand = "SELECT kod,[lev], [name1], Val_St, Cl_Act, Val_Cl_Act,[Share], X_RankingUSER, [ShareWithOUTfil_perc] " 
+                    + " FROM dbo.[StructureBalansGraph](@id_M, @id_regn, 1, 1, 8)  order by kod, [lev], Val_St;";
                 var results = db.Query(strCommand, new { id_M = id_M, id_regn = id_regn }).ToList();
 
                 //  шапка

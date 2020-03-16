@@ -103,21 +103,21 @@ function refresh() {
             }
         }
 
-        for (var a = 0; a < arrA1.length; a++) {
-            arrA1[a].valueOf = (arrA1[a].valueOf/SumA1) * 100;
-        }
+        //for (var a = 0; a < arrA1.length; a++) {
+        //    arrA1[a].valueOf = (arrA1[a].valueOf/SumA1) * 100;
+        //}
 
-        for (var a2 = 0; a2 < arrA2.length; a2++) {
-            arrA2[a2].valueOf = (arrA2[a2].valueOf / SumA2) * 100;
-        }
+        //for (var a2 = 0; a2 < arrA2.length; a2++) {
+        //    arrA2[a2].valueOf = (arrA2[a2].valueOf / SumA2) * 100;
+        //}
 
-        for (var a3 = 0; a3 < arrP1.length; a3++) {
-            arrP1[a3].valueOf = (arrP1[a3].valueOf / SumP1) * 100;
-        }
+        //for (var a3 = 0; a3 < arrP1.length; a3++) {
+        //    arrP1[a3].valueOf = (arrP1[a3].valueOf / SumP1) * 100;
+        //}
 
-        for (var a4 = 0; a4 < arrP2.length; a4++) {
-            arrP2[a4].valueOf = (arrP2[a4].valueOf / SumP2) * 100;
-        }
+        //for (var a4 = 0; a4 < arrP2.length; a4++) {
+        //    arrP2[a4].valueOf = (arrP2[a4].valueOf / SumP2) * 100;
+        //}
 
         PaintChart(arrA1, arrA2, arrP1, arrP2);
 

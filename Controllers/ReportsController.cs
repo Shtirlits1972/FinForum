@@ -20,6 +20,8 @@ namespace FinForum.Controllers
         {
             return View();
         }
+
+        [DisableRequestSizeLimit]
         public JsonResult Bubble_Chart(int id_mes, string kod, string strBankIds="")
         {
             string[] bankIds;
@@ -144,9 +146,16 @@ namespace FinForum.Controllers
             List<string[]> list = Q6Crud.ReportQ8(id_M, id_regn);
             return Json(list);
         }
-        public JsonResult GetBanks()
+        public JsonResult GetBanks(bool WithAll = false)
         {
-            List<Bank> list = BankCrud.GetAll();
+            List<Bank> list = (BankCrud.GetAll() as IEnumerable<Bank>).Take<Bank>(500).ToList();
+
+            if(WithAll)
+            {
+                Bank AllBank = new Bank { IntCode = 0, RegNumber = 0, OrgName = "Все банки" };
+                list.Insert(0, AllBank);
+            }
+
             return Json(list);
         }
         public JsonResult GetDT()

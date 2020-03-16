@@ -1,7 +1,16 @@
-﻿$(document).ready(function () {
+﻿var IdSelRow = 0;
 
-    $("#dateRanking").hide();
+
+$(document).ready(function () {
+
+    //$("#dateRanking").hide();
     $("#selNormals").hide();
+
+    $("#btnRenking").jqxButton({ theme: 'bootstrap' });
+
+    //$("#btnRenking").hide();
+    //$("#spandataRank").hide();
+    $("#spanNormals").hide();
 
     $("#btnRefresh").jqxButton({ theme: 'bootstrap' });
 
@@ -61,6 +70,35 @@
         displayMember: 'web_Friendly', selectedIndex: 0
     });
 
+    $('#SysTsel').on('change', function (event) {
+        var args = event.args;
+        if (args) {                         
+            var index = args.index;
+            var item = args.item;
+            // get item's label and value.
+            var label = item.label;
+            var value = item.value;
+            var type = args.type; 
+
+            if (value === 9) {
+                $("#selNormals").css("display", "block");
+                $("#spanNormals").css("display", "block");
+
+                $('#chartContainer').css("display", "none");
+
+                console.log(value);
+            }
+
+            else {
+                $("#selNormals").css("display", "none");
+                $("#spanNormals").css("display", "none");
+
+                $('#chartContainer').css("display", "block");
+
+            }
+        }
+    }); 
+
     var sourceNormals = {
         datatype: "json",
         datafields: [
@@ -96,7 +134,8 @@ function refresh() {
     if (sysT === 9) {
         $('#chartContainer').css("display", "none");
         $("#dateRanking").css("display", "block");
-        $("#selNormals").css("display", "block");
+        //$("#selNormals").css("display", "block");
+        //$("#spanNormals").css("display", "block");
 
         Ranking_on_DT(sysT, "TR0");
     }
@@ -139,8 +178,9 @@ function refresh() {
                         $('#chartContainer').css("display", "block");
                         $('#chartContainer').height("500px");
 
-                        $("#dateRanking").css("display", "block");
-                        $("#selNormals").css("display", "none");
+                        //$("#dateRanking").css("display", "block");
+                        //$("#selNormals").css("display", "none");
+                        //$("#spanNormals").css("display", "none");
                     }
                     else {
 
@@ -161,15 +201,17 @@ function refresh() {
                                 newCell3.setAttribute("style", "text-align: center;");
                             }
 
-                            $('#chartContainer').css("display", "block");
-                            $("#selNormals").css("display", "none");
+                            //$('#chartContainer').css("display", "block");
+                            //$("#selNormals").css("display", "none");
+                            //$("#spanNormals").css("display", "none");
                         }
 
-                        $("#dateRanking").css("display", "block");
+                        //$("#dateRanking").css("display", "block");
 
-                        if (sysT === 9) {
-                            $("#selNormals").css("display", "block");
-                        }
+                        //if (sysT === 9) {
+                        //    $("#selNormals").css("display", "block");
+                        //    $("#spanNormals").css("display", "block");
+                        //}
                     }
                 }
             }
@@ -178,7 +220,9 @@ function refresh() {
 }
 
 function PaintChart(id) {
-            if (id !== "TR0") {
+    if (id !== "TR0") {
+
+                IdSelRow = id;
 
                 var TabReportQ6 = document.getElementById("TabReportQ7").getElementsByTagName("td");
 
@@ -328,20 +372,12 @@ function Ranking_on_DT(sysT21, trId) {
                 th.setAttribute("style", "text-align: center;");
                 th.innerText = data[0][t];
                 rowHead.appendChild(th);
-
-                //var headCell = rowHead.insertCell(-1);
-                //headCell.innerText = data[0][t];
-                //headCell.setAttribute("style", "text-align: center;");
-
             }
 
             var tbdy = document.createElement('tbody');
             table.appendChild(tbdy);
 
             var RankingBody = table.getElementsByTagName('tbody')[0];
-
-            console.log(RankingBody);
-            debugger;
 
             for (var i = 1; i < data.length; i++) {
 
@@ -352,17 +388,12 @@ function Ranking_on_DT(sysT21, trId) {
                     var newCell = newRow.insertCell(-1);
                     newCell.innerText = data[i][j];
 
-                    //if (i === 0) {
-                    //    newCell.setAttribute("style", "text-align: center;");
-                    //}
-                    //else {
                         if (j === 3) {
                             newCell.setAttribute("style", "padding-left: 10px;");
                         }
                         else {
                             newCell.setAttribute("style", "text-align: center;");
                         }
-                    //}
                 }
             }
         }
@@ -371,4 +402,21 @@ function Ranking_on_DT(sysT21, trId) {
       
     }).fail(function () { alert('Ошибка!'); });
 
+}
+
+
+function Renking() {
+    console.log('Renking');
+
+    var sysT = $("#SysTsel").val();
+    if (sysT === 9) {
+        $('#chartContainer').css("display", "none");
+        $("#dateRanking").css("display", "block");
+
+        Ranking_on_DT(sysT, "TR0");
+    }
+    else {
+        var sysT2 = $("#SysTsel").val();
+        Ranking_on_DT(sysT2, IdSelRow);
+    }
 }

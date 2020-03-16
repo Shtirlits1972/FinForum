@@ -3,6 +3,11 @@
 <head>
     <meta charset="utf-8" />
     <title>Главный форум</title>
+
+    <script src="~/js/JQWidgets/jqxcombobox.js"></script>
+    <script src="~/js/JQWidgets/jqxcore.js"></script>
+    <script src="~/js/JQWidgets/jqxdata.js"></script>
+
     <script type="text/javascript" src="~/js/Views/Topic/topic.js"></script>
     <link rel="stylesheet" href="~/css/pagination.css">
 
@@ -19,19 +24,22 @@
         }
     }
 
+    <h2>@ViewBag.ForumPart</h2>
+
     <table style="width: 950px;">
         <tr>
             <td>
-                <input type="text" style="height: 30px;" id="inputSearch" name="inputSearch" class="form-control"  aria-describedby="inputGroup-sizing-sm" placeholder="поиск"/>
+                <input type="text" style="height: 30px;" id="inputSearch" name="inputSearch" class="form-control" aria-describedby="inputGroup-sizing-sm" placeholder="поиск" />
             </td>
             <td>
-                <button type="button" class="btn btn-outline-primary btn-xs py-0"  onclick="LikeSearch()" id="btnSearch" name="btnSearch" >поиск</button>
+                <button type="button" class="btn btn-outline-primary btn-xs py-0" onclick="getTopicByNum(1)" id="btnSearch" name="btnSearch">поиск</button>
             </td>
         </tr>
 
     </table>
 
     <input type="hidden" id="hiddenUserId" name="hiddenUserId" value=@UserId />
+    <input type="hidden" id="ForumPart" name="ForumPart" value=@ViewBag.ForumPart />
 
     <table id="tblTopic" name="tblTopic" style="width: 800px; height: 80%;">
         <thead>
@@ -55,7 +63,7 @@
         </nav>
     </div>
 
-    
+
 
 
     @Html.Partial("AddTopic")

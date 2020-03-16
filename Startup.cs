@@ -18,6 +18,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 
+using Microsoft.AspNetCore.Server.Kestrel.Core;
+
 namespace FinForum
 {
     public class Startup
@@ -66,6 +68,11 @@ namespace FinForum
                 options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             }).AddCookie().AddApplicationCookie();
+
+            services.Configure<IISServerOptions>(options =>
+            {
+                options.AutomaticAuthentication = false;
+            });
 
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

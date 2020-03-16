@@ -1,6 +1,6 @@
 ﻿function refresh() {
 
-    google.charts.load("current", { packages: ["corechart"] });
+    google.charts.load("current", { packages: ["corechart"], 'language': 'ru' });
     google.charts.setOnLoadCallback(drawChart);
 }
 
@@ -20,12 +20,15 @@ function drawChart() {
     for (var i = 0; i < listBanks.length; i++) {
 
 
-        if (i === 0) {
-            strBankIds += listBanks[i].value;
-        }
-        else if (i > 0) {
-            strBankIds += "," + listBanks[i].value;
-        }
+        //if (listBanks[i].value !== 0 ) {
+            if (i === 0) {
+                strBankIds += listBanks[i].value;
+            }
+            else if (i > 0) {
+                strBankIds += "," + listBanks[i].value;
+            }
+        //}
+
     }
 
     $.get("/Reports/Bubble_Chart", { id_mes: id_mes, kod: kod, strBankIds: strBankIds }, null, "json").done(function (data) {
@@ -34,7 +37,7 @@ function drawChart() {
 
             var bubbleArr = [];
 
-            var head = ['ID', 'X', 'Y','color', 'Z'];
+            var head = ['ID', 'X', 'Y', 'Z'];
             bubbleArr.push(head);
 
             for (var i = 1; i < data.length; i++) {
@@ -43,7 +46,7 @@ function drawChart() {
                     data[i][2],
                     Number(data[i][3].replace(',', '.')),
                     Number(data[i][4].replace(',', '.')),
-                    data[i][2],
+                    //data[i][2],
                     Number(data[i][5].replace(',', '.'))
                 ];
 
@@ -54,8 +57,9 @@ function drawChart() {
             var dataChart = google.visualization.arrayToDataTable(bubbleArr);
 
             var options = {
+                
                 title: 'Заголовок',
-                hAxis: { title: 'X' },
+                hAxis: { title: 'X', groupingSymbol: '.' },
                 vAxis: { title: 'Y' },
                 bubble: { textStyle: { fontSize: 11 } }
                 //colorAxis: { colors: ['yellow', 'red'] }
@@ -71,7 +75,7 @@ function drawChart() {
             var header = table.createTHead();
             var headRow = header.insertRow(0); 
 
-            for (var t = 0; t < 6;t++) {
+            for (var t = 0; t < 6; t++) {
                 var th = document.createElement('th');
                 th.setAttribute("style", "text-align: center; background-color:lightgray;");
 
@@ -217,7 +221,7 @@ $(document).ready(function () {
             { name: 'orgName', type: 'string' }
         ],
         id: 'regNumber',
-        url: '/Reports/GetBanks'
+        url: '/Reports/GetBanks?WithAll=' + true 
     };
 
     var dataAdapterBank = new $.jqx.dataAdapter(sourceBank, {
@@ -233,5 +237,32 @@ $(document).ready(function () {
         displayMember: 'orgName', checkboxes: true, multiSelect: true
     });
 
-    $("#bankSel").jqxComboBox('checkIndex', 0);
+    $("#bankSel").on('bindingComplete', function (event) {
+        $("#bankSel").jqxComboBox('checkAll');
+    });
+
+   
+    
+    $("#bankSel").on('checkChange', function (event) {
+        if (event.args) {
+            var item = event.args.item;
+            var value = item.value;
+            var label = item.label;
+            var checked = item.checked;
+            var checkedItems = $("#bankSel").jqxComboBox('getCheckedItems');
+
+            debugger;
+
+            if (value === 0) {
+                if (checked === true) {
+                    $("#bankSel").jqxComboBox('checkAll');
+                }
+                else {
+                    $("#bankSel").jqxComboBox('uncheckAll');
+                }
+            }
+            debugger;
+        }
+    });
+
 });

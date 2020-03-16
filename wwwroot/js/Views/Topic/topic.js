@@ -6,7 +6,7 @@ $(document).ready(function () {
     getTopicByNum(1);
 
     $("#popupWindow").jqxWindow({
-        width: 350, height: 600, resizable: false, isModal: true, autoOpen: false, cancelButton: $("#Cancel"), modalOpacity: 0.01
+        width: 350, height: 800, resizable: false, isModal: true, autoOpen: false, cancelButton: $("#Cancel"), modalOpacity: 0.01
     });
 
     $("#AddComment").jqxWindow({
@@ -26,11 +26,7 @@ $(document).ready(function () {
         var addTopicId = $('#TopicId').val();
         var addMessageId = $('#MessagesId').val();
 
-        debugger;
-
         $.post("/Home/AddMessagess", { TopicId: addTopicId, MessagesId: addMessageId, TextMess: Text }, null, "json").done(function (data) {
-
-            debugger;
 
             var NewComment = buildCommentElem(data, addTopicId, null);
             var divTmp = document.createElement('div');
@@ -63,16 +59,30 @@ $(document).ready(function () {
 
         var Title = $("#Title").val();
         var Text = $("#Text").val();
+        var ForumPart = $("#ForumSel").val();
 
-        $.post("/Home/AddTopic", { Title: Title, Text: Text }, null, "json").done(function (data) {
+        var ForumPart2 = $("#ForumPart").val();                  //  
 
-            var Topic = buildTopicElem(data);
-            tbody.deleteRow(4);
+        debugger;
 
-            row = tbody.insertRow(0);
-            cell = row.insertCell();
-            cell.innerHTML = Topic;
-                
+        $.post("/Home/AddTopic", { Title: Title, Text: Text, ForumPart: ForumPart }, null, "json").done(function (data) {
+
+            if (ForumPart === ForumPart2) {
+
+                var Topic = buildTopicElem(data);
+
+                var RowCount = tbody.rows.length;
+
+                if (RowCount === 5) {
+                    tbody.deleteRow(4);
+                }
+
+                row = tbody.insertRow(0);
+                cell = row.insertCell();
+                cell.innerHTML = Topic;
+
+            }
+
             }).fail(function () {
                 alert('Error!');
             });
@@ -88,6 +98,22 @@ $(document).ready(function () {
     $('#Text').jqxTextArea({ width: 250, height: 200, placeHolder: 'Содержание...' });
 
     $('#TextComment').jqxTextArea({ width: 250, height: 200, placeHolder: 'Комментарий...' });
+
+    var sourceF = {
+        datatype: "json",
+        datafields: [
+            { name: 'values', type: 'string' }
+        ],
+        url: '/Home/GetForumList'
+    };
+
+    var dataAdapterF = new $.jqx.dataAdapter(sourceF);
+
+    $("#ForumSel").jqxComboBox({
+        source: dataAdapterF, width: '175px', height: '25px', valueMember: 'values',
+        displayMember: 'values', selectedIndex: 0
+    });
+
 });
 
 function AddNewMessage(TopicId, MessageId) {
@@ -106,7 +132,12 @@ function getTopicByNum(index) {
         strLike = "";
     }
 
-    $.get("/Home/GetData", { page: index, take: 5, strLike: strLike }, null, "json").done(function (data) {
+    var ForumPart = $("#ForumPart").val();
+    if (ForumPart === undefined || ForumPart === null) {
+        ForumPart = "Главный";
+    }
+
+    $.get("/Home/GetData", { page: index, take: 5, strLike: strLike, ForumPart: ForumPart }, null, "json").done(function (data) {
         debugger;
         buildPaginator(data.intLength);
 
@@ -166,6 +197,7 @@ function openDiv(divId) {
 }
 
 function AddTheme() {
+
     $("#popupWindow").jqxWindow('open');
 }
 
@@ -191,7 +223,7 @@ function getUserId() {
 
 function buildTopicElem(topicInput) {
     var dataCreate = ConvertStringData(topicInput.dataCreate);
-    debugger;
+
     var strComment = '';
     //var UserId = getUserId();
 

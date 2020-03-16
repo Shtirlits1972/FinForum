@@ -13,6 +13,7 @@ namespace FinForum.Models.TopicF
         public int AuthorId { get; set; }
         public string userFio { get; set; } = "";
         public DateTime DataCreate { get; set; }
+        public string ForumPart { get; set; } = "Главный";
         public List<Messagess> listMessages { get; set; } = new List<Messagess>();
         public override string ToString()
         {

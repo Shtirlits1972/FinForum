@@ -36,7 +36,7 @@
 
         <tr>
             <td>
-                <button type="button" id="btnRefresh" name="btnRefresh" onclick="refresh()">ОБНОВИТЬ</button>
+                <button type="button" id="btnRefresh" style="width: 100px;" name="btnRefresh" onclick="refresh()">ОБНОВИТЬ</button>
             </td>
             <td>
                 <div id='SysTsel'></div>
@@ -47,9 +47,23 @@
             <td>
                 <div id='dateEnd'></div>
             </td>
+
+        </tr>
+    </table>
+
+    <table class="table-bordered" style="width: 1200px; max-width: 1200px; ">
+        <tr>
+            <th></th>
+            <th><span id="spandataRank">Дата рэнкинг</span>   </th>
+            <th><span id="spanNormals">Normals</span>  </th>
+        </tr>
+        <tr>
+            <td>
+                <button type="button" style="width: 100px;" id="btnRenking" name="btnRenking" onclick="Renking()">Рэнкинг</button>
+            </td>
             <td>
                 <div id='dateRanking'></div>
-            </td>          
+            </td>
             <td>
                 <div id='selNormals'></div>
             </td>
