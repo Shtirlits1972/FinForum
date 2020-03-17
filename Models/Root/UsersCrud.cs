@@ -37,7 +37,7 @@ namespace FinForum.Models.Root
 
             using (IDbConnection db = new SqlConnection(strConn))
             {
-                model = db.Query<Users>("SELECT TOP 1 Id, email, pass, [role], userFio, isBanned FROM Users WHERE Email = @Email AND Pass = @Pass;", new { Email, Pass }).FirstOrDefault();
+                model = db.Query<Users>("SELECT TOP 1 Id, email, pass, [role], userFio, isBanned FROM Users WHERE Email = @Email AND Pass = @Pass AND IsBanned = 0;", new { Email, Pass }).FirstOrDefault();
             }
 
             return model;

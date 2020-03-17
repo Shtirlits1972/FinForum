@@ -60,11 +60,14 @@ namespace FinForum.Models.TopicF
 
         public static forum[] GetForumList()
         {
-            forum[] array = new  forum [3];
+            forum[] array = new  forum [5];
 
             array[0] = new forum { values = "Главный" };
             array[1] = new forum { values = "Безлимитный" };
             array[2] = new forum { values = "Вакансии" };
+
+            array[3] = new forum { values = "Бумаги" };
+            array[4] = new forum { values = "Прогнозы" };
 
             return array;
         }

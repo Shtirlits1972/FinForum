@@ -69,6 +69,8 @@ namespace FinForum
                 options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             }).AddCookie().AddApplicationCookie();
 
+            services.Configure<KestrelServerOptions>(Configuration.GetSection("Kestrel"));
+
             services.Configure<IISServerOptions>(options =>
             {
                 options.AutomaticAuthentication = false;

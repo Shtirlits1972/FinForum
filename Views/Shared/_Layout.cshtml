@@ -1,4 +1,10 @@
-﻿<!DOCTYPE html>
+﻿@{ 
+    FinForum.Models.TopicF.TopicCrud.forum[] listForum = FinForum.Models.TopicF.TopicCrud.GetForumList();
+}
+
+
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -58,21 +64,27 @@
                             </a>
                             <ul role="menu" class="dropdown-menu">
 
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index" asp-route-id="Безлимитный">Безлимитный форум</a>
-                                </li>
+                                @for (int i = 1; i < listForum.Length; i++)
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index" asp-route-id="@listForum[i].values">@listForum[i].values</a>
+                                    </li>
+                                }
 
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index" asp-route-id="Вакансии">Вакансии</a>
-                                </li>
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    @if (User.IsInRole("Админ"))
+                                    {
+                                        <li class="nav-item">
+                                            <a class="nav-link text-dark" asp-area="" asp-controller="AdminPanel" asp-action="Index">Админ панель</a>
+                                        </li>
 
-                                @*<li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Bankrep" asp-action="Index">Bankrep.ru</a>
-                                </li>*@
+                                        <li class="nav-item">
+                                            <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">Пользователи</a>
+                                        </li>
+                                    }
 
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="AdminPanel" asp-action="Index">Админ панель</a>
-                                </li>
+                                }
 
                             </ul>
                         </li>
@@ -111,16 +123,8 @@
                             </ul>
                         </li>
 
-
-
-
-
-
-
-
-
                     </ul>
-</div>
+                    </div>
                 @Html.Partial("_Loginpartial")
             </div>
         </nav>

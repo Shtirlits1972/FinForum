@@ -233,9 +233,15 @@ $(document).ready(function () {
     });
 
     $("#bankSel").jqxComboBox({
-        source: dataAdapterBank, width: '200px', height: '25px', promptText: "Выбирай: ", valueMember: 'regNumber',
-        displayMember: 'orgName', checkboxes: true, multiSelect: true
+        source: dataAdapterBank, width: '200px', height: '25px', valueMember: 'regNumber',
+        displayMember: 'orgName', checkboxes: true  /*, multiSelect: true*/
     });
+
+    //
+    //$("#bankSel").jqxComboBox({
+    //    source: dataAdapterBank, width: '200px', height: '25px', promptText: "Выбирай: ", valueMember: 'regNumber',
+    //    displayMember: 'orgName', checkboxes: true, multiSelect: true
+    //});
 
     $("#bankSel").on('bindingComplete', function (event) {
         $("#bankSel").jqxComboBox('checkAll');

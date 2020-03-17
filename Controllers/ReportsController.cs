@@ -148,7 +148,7 @@ namespace FinForum.Controllers
         }
         public JsonResult GetBanks(bool WithAll = false)
         {
-            List<Bank> list = (BankCrud.GetAll() as IEnumerable<Bank>).Take<Bank>(500).ToList();
+            List<Bank> list = (BankCrud.GetAll() as IEnumerable<Bank>).Take<Bank>(1000).ToList();
 
             if(WithAll)
             {
